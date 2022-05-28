@@ -1,12 +1,18 @@
+import { useState } from "react";
 import {
   Container,
   Typography,
   Box,
   createTheme,
   GrayTextP,
+  LoadingButton,
 } from "utils/material-ui";
 
 import { TextFormField, CustomButton, RouterLink } from "components";
+import { handleFormChange } from "./utils";
+import { useDispatch, useSelector } from "react-redux";
+import { login, loginAsGuest } from "../../firebase/firebase-auth";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
@@ -18,6 +24,28 @@ theme.typography.h1 = {
 };
 
 export const Login = () => {
+  const initalFormValues = {
+    email: "",
+    password: "",
+  };
+
+  const [formValues, setFormValues] = useState(initalFormValues);
+  const { isLoggingIn, isLoggingInAsGuest } = useSelector(
+    (store) => store.authDetail
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { email, password } = formValues;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    await dispatch(login(formValues));
+
+    navigate("/");
+  };
+
   return (
     <Container
       maxWidth="sm"
@@ -48,18 +76,71 @@ export const Login = () => {
         >
           Login to AutoCrew
         </Typography>
-        <Box component="form">
-          <TextFormField label="Username" />
+        <Box component="form" onSubmit={handleSubmit}>
+          <TextFormField
+            label="Email"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => handleFormChange(e, setFormValues)}
+          />
 
-          <TextFormField label="Password" type="password" />
+          <TextFormField
+            label="Password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => handleFormChange(e, setFormValues)}
+          />
 
-          <CustomButton type="submit" fullWidth="true" variant="contained">
-            Login
-          </CustomButton>
+          {isLoggingIn === "loading" ? (
+            <LoadingButton
+              loading
+              variant="contained"
+              sx={{
+                my: "0.6rem",
+                p: 1.2,
+              }}
+              fullWidth
+            >
+              Login
+            </LoadingButton>
+          ) : (
+            <CustomButton
+              type="submit"
+              fullWidth={true}
+              variant="contained"
+              disabled={isLoggingInAsGuest === "loading"}
+            >
+              Login
+            </CustomButton>
+          )}
 
-          <CustomButton fullWidth="true" variant="outlined">
-            Login as guest
-          </CustomButton>
+          {isLoggingInAsGuest === "loading" ? (
+            <LoadingButton
+              loading
+              variant="contained"
+              sx={{
+                my: "0.6rem",
+                p: 1.2,
+              }}
+              fullWidth
+            >
+              Login
+            </LoadingButton>
+          ) : (
+            <CustomButton
+              fullWidth={true}
+              variant="outlined"
+              onClick={async () => {
+                await dispatch(loginAsGuest());
+                navigate("/");
+              }}
+              disabled={isLoggingIn === "loading"}
+            >
+              Login as guest
+            </CustomButton>
+          )}
         </Box>
 
         <Box my={1} mx={0.5}>

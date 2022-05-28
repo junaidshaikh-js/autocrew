@@ -5,6 +5,8 @@ export const CustomButton = ({
   type = "button",
   fullWidth,
   variant,
+  onClick,
+  disabled,
 }) => {
   return (
     <Button
@@ -15,6 +17,8 @@ export const CustomButton = ({
         p: 1.2,
       }}
       fullWidth={fullWidth}
+      onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </Button>
