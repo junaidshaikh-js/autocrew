@@ -1,10 +1,11 @@
 import { Navigate, useLocation, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const PrivateRoute = () => {
   const location = useLocation();
-  const user = false;
+  const { token } = useSelector((store) => store.authDetail);
 
-  return user ? (
+  return token ? (
     <div>
       <Outlet />
     </div>
