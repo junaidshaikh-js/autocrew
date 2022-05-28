@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import toast from "react-hot-toast";
 
@@ -60,3 +61,7 @@ export const loginAsGuest = createAsyncThunk(
     }
   }
 );
+
+export const logout = async () => {
+  await signOut(auth);
+};
