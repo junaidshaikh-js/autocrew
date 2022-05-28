@@ -1,6 +1,9 @@
 import { styled } from "@material-ui/core";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export { Container, Typography, Box, TextField, Button } from "@mui/material";
+
+export { LoadingButton };
 
 export const GrayTextP = styled("p")({
   color: "#9e9e9e",
