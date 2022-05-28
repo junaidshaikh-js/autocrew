@@ -3,7 +3,7 @@ import {
   Container,
   Typography,
   Box,
-  createTheme,
+  theme,
   GrayTextP,
   LoadingButton,
 } from "utils/material-ui";
@@ -13,15 +13,6 @@ import { handleFormChange } from "./utils";
 import { useDispatch, useSelector } from "react-redux";
 import { login, loginAsGuest } from "../../firebase/firebase-auth";
 import { useNavigate } from "react-router-dom";
-
-const theme = createTheme();
-
-theme.typography.h1 = {
-  fontSize: "1.8rem",
-  "@media (min-width:600px)": {
-    fontSize: "2rem",
-  },
-};
 
 export const Login = () => {
   const initalFormValues = {
