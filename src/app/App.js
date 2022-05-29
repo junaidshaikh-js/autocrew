@@ -1,17 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { Login, Signup } from "features";
+import { Login, Signup, Profile, Posts, Followers, Following } from "features";
+
 import {
   PrivateRoute,
   Home,
   Explore,
   Bookmark,
   Notification,
-  Profile,
-  Posts,
-  Followers,
-  Following,
 } from "components";
 import "./App.css";
 
