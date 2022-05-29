@@ -5,8 +5,18 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import CircularProgress from "@mui/material/CircularProgress";
+import Avatar from "@mui/material/Avatar";
 
-export { Container, Typography, Box, TextField, Button } from "@mui/material";
+export {
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  Stack,
+  IconButton,
+} from "@mui/material";
 
 export {
   LoadingButton,
@@ -16,6 +26,8 @@ export {
   ListItemIcon,
   ListItemText,
   Grid,
+  CircularProgress,
+  Avatar,
 };
 
 export const GrayTextP = styled("p")({

@@ -3,6 +3,7 @@ import RocketOutlinedIcon from "@mui/icons-material/RocketOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 
 export {
   HomeOutlinedIcon,
@@ -10,4 +11,5 @@ export {
   BookmarkBorderOutlinedIcon,
   NotificationsNoneOutlinedIcon,
   AccountCircleOutlinedIcon,
+  CameraAltOutlinedIcon,
 };
