@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
-import { ReactPortal } from "./ReactPortal";
-import { ProfileModal } from "./ProfileModal";
+import { ReactPortal } from "../../components/ReactPortal";
+import { ProfileModal } from "../../components/ProfileModal";
 
-import { getUserDetail } from "../firebase/firebase-calls";
+import { getUserDetail } from "../../firebase/firebase-calls";
 import {
   Box,
   CircularProgress,

@@ -1,4 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { TextFormField } from "./components/TextFormField";
+import { CustomButton } from "./components/CustomButton";
+import { RouterLink } from "./components/RouterLink";
+import { handleFormChange } from "./utils";
+import { login, loginAsGuest } from "../../firebase/firebase-auth";
 import {
   Container,
   Typography,
@@ -7,12 +15,6 @@ import {
   GrayTextP,
   LoadingButton,
 } from "utils/material-ui";
-
-import { TextFormField, CustomButton, RouterLink } from "components";
-import { handleFormChange } from "./utils";
-import { useDispatch, useSelector } from "react-redux";
-import { login, loginAsGuest } from "../../firebase/firebase-auth";
-import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const initalFormValues = {
