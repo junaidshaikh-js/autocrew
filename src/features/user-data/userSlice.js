@@ -21,7 +21,11 @@ const initialState = {
 const userSlice = createSlice({
   name: "userData",
   initialState,
-  reducers: {},
+  reducers: {
+    updateUserDetailState: (state, action) => {
+      state.userData = { ...state.userData, ...action.payload };
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserDetail.pending, (state) => {
       state.userDetailLoading = loading;
@@ -35,5 +39,7 @@ const userSlice = createSlice({
     });
   },
 });
+
+export const { updateUserDetailState } = userSlice.actions;
 
 export default userSlice.reducer;
