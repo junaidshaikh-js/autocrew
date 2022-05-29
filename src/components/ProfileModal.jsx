@@ -1,4 +1,6 @@
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserDetail } from "../firebase/firebase-calls";
 
 import {
   Box,
@@ -9,12 +11,64 @@ import {
   IconButton,
   CameraAltOutlinedIcon,
   TextField,
+  CircularProgress,
+  LoadingButton,
 } from "utils/material-ui";
 
 export const ProfileModal = ({ setShowModal }) => {
-  const { profilePicture, fullName } = useSelector(
-    (store) => store.userDetail.userData
-  );
+  const {
+    userData: { profilePicture, fullName, firstName, lastName, bio, website },
+  } = useSelector((store) => store.userDetail);
+  const { token } = useSelector((store) => store.authDetail);
+  const dispatch = useDispatch();
+
+  const [userDetails, setUserDetails] = useState({
+    profilePicture,
+    firstName,
+    lastName,
+    bio,
+    website,
+  });
+  const [isImageUploading, setIsImageUploading] = useState(false);
+  const [updatingUserDetail, setUpdatingUserDetail] = useState(false);
+
+  const handleUserDetailChange = (e) => {
+    const { name, value } = e.target;
+
+    setUserDetails((u) => ({ ...u, [name]: value }));
+  };
+
+  const handleProfileChange = async (e) => {
+    try {
+      setIsImageUploading(true);
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      formData.append("upload_preset", "fo0akwis");
+
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/junaidshaikh/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+
+      setUserDetails((u) => ({ ...u, profilePicture: data.url }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsImageUploading(false);
+    }
+  };
+
+  const handleUserDetailSubmit = async () => {
+    setUpdatingUserDetail(true);
+    await updateUserDetail(token, userDetails, dispatch);
+    setUpdatingUserDetail(false);
+    setShowModal(false);
+  };
 
   return (
     <Box
@@ -30,6 +84,7 @@ export const ProfileModal = ({ setShowModal }) => {
         width: "100vw",
         backgroundColor: "#a8a8a842",
       }}
+      onClick={() => setShowModal(false)}
     >
       <Box
         sx={{
@@ -38,6 +93,7 @@ export const ProfileModal = ({ setShowModal }) => {
           width: "min(90vw, 540px)",
           p: 1,
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         <Box>
           <Stack
@@ -52,7 +108,18 @@ export const ProfileModal = ({ setShowModal }) => {
               Edit Profile
             </Typography>
             <Stack direction="row" spacing={2}>
-              <Button variant="contained">Save</Button>
+              {updatingUserDetail ? (
+                <LoadingButton loading variant="contained">
+                  Save
+                </LoadingButton>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={() => handleUserDetailSubmit()}
+                >
+                  Save
+                </Button>
+              )}
               <Button variant="outlined" onClick={() => setShowModal(false)}>
                 Cancle
               </Button>
@@ -72,7 +139,7 @@ export const ProfileModal = ({ setShowModal }) => {
                 mx: "auto",
               }}
             >
-              {profilePicture ? (
+              {userDetails.profilePicture ? (
                 <Avatar
                   sx={{
                     bgcolor: "#1565C0",
@@ -81,8 +148,10 @@ export const ProfileModal = ({ setShowModal }) => {
                     fontSize: "3rem",
                     mx: "auto",
                     filter: "grayscale(50)",
+                    objectFit: "contain",
+                    border: 1,
                   }}
-                  src={profilePicture}
+                  src={userDetails.profilePicture}
                 />
               ) : (
                 <Avatar
@@ -92,31 +161,44 @@ export const ProfileModal = ({ setShowModal }) => {
                     height: 100,
                     fontSize: "3rem",
                     mx: "auto",
-                    filter: "opacity(50%)",
+                    filter: "grascale(20%)",
                   }}
                 >
                   {fullName?.slice(0, 1)}
                 </Avatar>
               )}
 
-              <IconButton
-                color="secondary"
-                component="label"
-                sx={{
-                  position: "absolute",
-                  top: "0",
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  aria-label="Select Profile Picture"
+              {isImageUploading ? (
+                <CircularProgress
+                  sx={{
+                    position: "absolute",
+                    top: "30%",
+                    left: "30%",
+                  }}
+                  color="secondary"
                 />
-                <CameraAltOutlinedIcon fontSize="medium" />
-              </IconButton>
+              ) : (
+                <IconButton
+                  color="secondary"
+                  component="label"
+                  sx={{
+                    position: "absolute",
+                    top: "0",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    aria-label="Select Profile Picture"
+                    name="profilePicture"
+                    onChange={(e) => handleProfileChange(e)}
+                  />
+                  <CameraAltOutlinedIcon fontSize="medium" />
+                </IconButton>
+              )}
             </Box>
 
             <Box>
@@ -128,6 +210,9 @@ export const ProfileModal = ({ setShowModal }) => {
                 inputProps={{
                   maxLength: 25,
                 }}
+                value={userDetails.firstName}
+                name="firstName"
+                onChange={(e) => handleUserDetailChange(e)}
                 fullWidth
               />
             </Box>
@@ -141,6 +226,9 @@ export const ProfileModal = ({ setShowModal }) => {
                 inputProps={{
                   maxLength: 25,
                 }}
+                value={userDetails.lastName}
+                name="lastName"
+                onChange={(e) => handleUserDetailChange(e)}
                 fullWidth
               />
             </Box>
@@ -154,8 +242,11 @@ export const ProfileModal = ({ setShowModal }) => {
                 inputProps={{
                   maxLength: 160,
                 }}
+                value={userDetails.bio}
+                name="bio"
+                onChange={(e) => handleUserDetailChange(e)}
                 fullWidth
-                multiline
+                // multiline
               />
             </Box>
 
@@ -166,8 +257,11 @@ export const ProfileModal = ({ setShowModal }) => {
                 variant="outlined"
                 margin="normal"
                 inputProps={{
-                  maxLength: 160,
+                  maxLength: 100,
                 }}
+                value={userDetails.website}
+                name="website"
+                onChange={(e) => handleUserDetailChange(e)}
                 fullWidth
               />
             </Box>
