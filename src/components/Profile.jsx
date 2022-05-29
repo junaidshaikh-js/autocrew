@@ -19,17 +19,13 @@ import {
   ListItemText,
   Stack,
 } from "utils/material-ui";
+import { useEscape } from "hooks";
 
 const useStyles = makeStyles({
   button: {
     "&.active": {
       background: "lightblue",
     },
-  },
-
-  li: {
-    padding: 0,
-    textAlign: "center",
   },
 });
 
@@ -39,7 +35,7 @@ export const Profile = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const {
     userDetailLoading,
-    userData: { fullName, profilePicture, userName, bio, website },
+    userData: { bio, website, fullName, profilePicture, userName },
   } = useSelector((store) => store.userDetail);
   const { token } = useSelector((store) => store.authDetail);
   const dispatch = useDispatch();
@@ -49,6 +45,8 @@ export const Profile = () => {
       dispatch(getUserDetail(token));
     }
   }, [dispatch, userDetailLoading, token]);
+
+  useEscape(setIsEditingProfile);
 
   return (
     <Box>
@@ -74,12 +72,26 @@ export const Profile = () => {
               pb: "1rem",
             }}
           >
-            {profilePicture ? null : (
+            {profilePicture ? (
               <Avatar
                 sx={{
                   bgcolor: "#1565C0",
-                  width: 150,
-                  height: 150,
+                  width: 100,
+                  height: 100,
+                  fontSize: "3rem",
+                  mx: "auto",
+                  filter: "grayscale(50)",
+                  objectFit: "contain",
+                  border: 1,
+                }}
+                src={profilePicture}
+              />
+            ) : (
+              <Avatar
+                sx={{
+                  bgcolor: "#1565C0",
+                  width: 100,
+                  height: 100,
                   fontSize: "5rem",
                 }}
               >
@@ -106,7 +118,7 @@ export const Profile = () => {
             {bio && (
               <Typography
                 sx={{
-                  my: "1.5rem",
+                  my: "0.5rem",
                 }}
               >
                 {bio}
@@ -117,7 +129,8 @@ export const Profile = () => {
               <Button
                 href={website}
                 sx={{
-                  my: "1.5rem",
+                  my: "0.5rem",
+                  textTransform: "lowercase",
                 }}
               >
                 {website}
