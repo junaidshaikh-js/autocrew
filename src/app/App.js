@@ -9,6 +9,9 @@ import {
   Bookmark,
   Notification,
   Profile,
+  Posts,
+  Followers,
+  Following,
 } from "components";
 import "./App.css";
 
@@ -32,7 +35,11 @@ function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/bookmarks" element={<Bookmark />} />
           <Route path="/notifications" element={<Notification />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile />}>
+            <Route path="/profile" element={<Posts />} />
+            <Route path="/profile/followers" element={<Followers />} />
+            <Route path="/profile/following" element={<Following />} />
+          </Route>
         </Route>
       </Routes>
     </div>

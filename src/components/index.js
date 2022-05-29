@@ -8,6 +8,9 @@ import { Explore } from "./Explore";
 import { Bookmark } from "./Bookmark";
 import { Notification } from "./Notification";
 import { Profile } from "./Profile";
+import { Posts } from "./Posts";
+import { Followers } from "./Followers";
+import { Following } from "./Following";
 
 export {
   PrivateRoute,
@@ -20,4 +23,7 @@ export {
   Bookmark,
   Notification,
   Profile,
+  Posts,
+  Followers,
+  Following,
 };
