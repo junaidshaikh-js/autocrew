@@ -80,7 +80,6 @@ export const Profile = () => {
                   height: 100,
                   fontSize: "3rem",
                   mx: "auto",
-                  filter: "grayscale(50)",
                   objectFit: "contain",
                   border: 1,
                 }}
