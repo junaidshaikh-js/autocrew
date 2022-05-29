@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { createUserDb } from "./firebase-calls";
 import toast from "react-hot-toast";
 
 import { auth } from "./config";
@@ -19,6 +20,8 @@ export const signup = createAsyncThunk(
         email,
         password
       );
+
+      await createUserDb(firstName, lastName, userName, email, user.uid);
 
       toast.success("Sign up successful");
       return user.uid;
