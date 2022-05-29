@@ -131,7 +131,7 @@ export const SideNavigation = () => {
             dispatch(logoutUser());
             localStorage.removeItem("token");
             toast.success("Logged out successfully");
-            navigate("/");
+            navigate(0);
           }}
         >
           Log Out

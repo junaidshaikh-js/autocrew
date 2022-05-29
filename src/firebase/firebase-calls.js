@@ -67,10 +67,22 @@ export const updateUserDetail = async (userId, updatedUserDetail, dispatch) => {
     const userDataRef = doc(db, userId, "userData");
     const usersRef = doc(db, "users", userId);
 
-    await updateDoc(userDataRef, updatedUserDetail);
-    await updateDoc(usersRef, updatedUserDetail);
+    await updateDoc(userDataRef, {
+      ...updatedUserDetail,
+      fullName: updatedUserDetail.firstName + " " + updatedUserDetail.lastName,
+    });
+    await updateDoc(usersRef, {
+      ...updatedUserDetail,
+      fullName: updatedUserDetail.firstName + " " + updatedUserDetail.lastName,
+    });
 
-    dispatch(updateUserDetailState(updatedUserDetail));
+    dispatch(
+      updateUserDetailState({
+        ...updatedUserDetail,
+        fullName:
+          updatedUserDetail.firstName + " " + updatedUserDetail.lastName,
+      })
+    );
   } catch (error) {
     console.log(error);
   }
