@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import Picker from "emoji-picker-react";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
+import { addNewPost, getAllPosts } from "../firebase/firebase-calls";
 import {
   Stack,
   Button,
@@ -12,16 +14,20 @@ import {
   EmojiEmotionsIcon,
   IconButton,
   PhotoCamera,
+  LoadingButton,
 } from "utils/material-ui";
-import toast from "react-hot-toast";
 
-export const AddPost = () => {
+const initialPostImageStatus = { url: "", fileName: "" };
+
+export const AddPost = ({ setLoadingPosts, loadingPosts }) => {
   const {
     userData: { profilePicture },
   } = useSelector((store) => store.userDetail);
+  const { token } = useSelector((store) => store.authDetail);
+  const dispatch = useDispatch();
 
   const [postText, setPostText] = useState("");
-  const [postImage, setPostImage] = useState({ url: "", fileName: "" });
+  const [postImage, setPostImage] = useState(initialPostImageStatus);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const onEmojiClick = (event, emojiObject) => {
@@ -48,9 +54,30 @@ export const AddPost = () => {
       );
       const data = await res.json();
 
-      setPostImage({ url: data.url, fileName: data.orignal_filename });
+      setPostImage({ url: data.url, fileName: data.original_filename });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleSubmitPost = async () => {
+    if (!postText && !postImage.url) {
+      toast.error("Add some content");
+      return;
+    }
+
+    try {
+      setLoadingPosts(true);
+
+      await addNewPost(token, postText, postImage);
+
+      dispatch(getAllPosts());
+      setPostText("");
+      setPostImage(initialPostImageStatus);
+      setLoadingPosts(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingPosts(false);
     }
   };
 
@@ -76,8 +103,8 @@ export const AddPost = () => {
           <Avatar
             sx={{
               bgcolor: "#1565C0",
-              width: 70,
-              height: 70,
+              width: 60,
+              height: 60,
               fontSize: "3rem",
               mx: "auto",
               objectFit: "contain",
@@ -162,9 +189,19 @@ export const AddPost = () => {
             </IconButton>
           </Box>
           <Box>
-            <Button variant="contained" disableRipple>
-              Post
-            </Button>
+            {loadingPosts ? (
+              <LoadingButton loading variant="contained">
+                Save
+              </LoadingButton>
+            ) : (
+              <Button
+                variant="contained"
+                disableRipple
+                onClick={() => handleSubmitPost()}
+              >
+                Post
+              </Button>
+            )}
           </Box>
         </Stack>
 
@@ -175,7 +212,7 @@ export const AddPost = () => {
             }}
           >
             <Picker
-              pickerStyle={{ width: "100%" }}
+              pickerStyle={{ width: "100%", zIndex: 1 }}
               onEmojiClick={onEmojiClick}
             />
           </Box>
