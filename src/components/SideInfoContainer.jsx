@@ -8,6 +8,8 @@ export const SideInfoContainer = () => {
         backgroundColor: "white",
         borderRadius: 2,
         display: { xs: "none", md: "block" },
+        position: "sticky",
+        top: "1rem",
       }}
     >
       <Typography
