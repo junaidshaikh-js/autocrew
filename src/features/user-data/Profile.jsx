@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
-import { ReactPortal } from "../../components/ReactPortal";
-import { ProfileModal } from "../../components/ProfileModal";
 
 import { getUserDetail } from "../../firebase/firebase-calls";
+import { ReactPortal, ProfileModal } from "components";
+import { useEscape } from "hooks";
 import {
   Box,
   CircularProgress,
@@ -19,7 +19,6 @@ import {
   ListItemText,
   Stack,
 } from "utils/material-ui";
-import { useEscape } from "hooks";
 
 const useStyles = makeStyles({
   button: {

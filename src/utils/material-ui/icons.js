@@ -4,6 +4,8 @@ import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlin
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 export {
   HomeOutlinedIcon,
@@ -12,4 +14,6 @@ export {
   NotificationsNoneOutlinedIcon,
   AccountCircleOutlinedIcon,
   CameraAltOutlinedIcon,
+  EmojiEmotionsIcon,
+  PhotoCamera,
 };
