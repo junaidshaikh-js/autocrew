@@ -6,6 +6,11 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import CommentIcon from "@mui/icons-material/Comment";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export {
   HomeOutlinedIcon,
@@ -16,4 +21,9 @@ export {
   CameraAltOutlinedIcon,
   EmojiEmotionsIcon,
   PhotoCamera,
+  FavoriteBorderIcon,
+  CommentIcon,
+  BookmarkBorderIcon,
+  BookmarkIcon,
+  FavoriteIcon,
 };
