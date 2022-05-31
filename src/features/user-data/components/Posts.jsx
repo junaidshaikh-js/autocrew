@@ -7,11 +7,11 @@ export const Posts = () => {
   const { posts } = useSelector((store) => store.posts);
   const { token } = useSelector((store) => store.authDetail);
 
-  const postByUser = posts.filter((post) => post.postBy === token);
+  const postByUser = posts.filter((post) => post.data.postBy === token);
   return (
     <Box component="section">
       {postByUser.map((post) => (
-        <Post postData={post} key={post.dateCreated} />
+        <Post post={post} key={post.data.dateCreated} />
       ))}
     </Box>
   );
