@@ -40,7 +40,12 @@ export const SideNavigation = () => {
   const navigate = useNavigate();
 
   return (
-    <Box>
+    <Box
+      sx={{
+        position: "sticky",
+        top: "1rem",
+      }}
+    >
       <nav>
         <List>
           <ListItem>

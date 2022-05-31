@@ -1,36 +1,44 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
+import { Post } from "features";
 import { AddPost } from "./AddPost";
-import { getUserDetail } from "../firebase/firebase-calls";
 import { Box, CircularProgress } from "utils/material-ui";
 
 export const Home = () => {
-  const { token } = useSelector((store) => store.authDetail);
   const { userDetailLoading } = useSelector((store) => store.userDetail);
-  const dispatch = useDispatch();
+  const { posts } = useSelector((store) => store.posts);
 
-  useEffect(() => {
-    if (userDetailLoading === "idle") {
-      dispatch(getUserDetail(token));
-    }
-  }, [dispatch, userDetailLoading, token]);
+  const [loadingPosts, setLoadingPosts] = useState(false);
 
   return (
-    <Box component="main">
+    <Box component="main" sx={{ border: 1 }}>
       {userDetailLoading === "loading" ? (
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            height: "60vh",
+            height: "100vh",
           }}
         >
           <CircularProgress size="4rem" />
         </Box>
       ) : (
-        <AddPost />
+        <>
+          <Box component="section">
+            <AddPost
+              loadingPosts={loadingPosts}
+              setLoadingPosts={setLoadingPosts}
+            />
+          </Box>
+
+          <Box component="section">
+            {posts.map((post) => (
+              <Post postData={post} key={post.dateCreated} />
+            ))}
+          </Box>
+        </>
       )}
     </Box>
   );

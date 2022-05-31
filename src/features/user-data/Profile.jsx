@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
 
-import { getUserDetail } from "../../firebase/firebase-calls";
 import { ReactPortal, ProfileModal } from "components";
 import { useEscape } from "hooks";
 import {
@@ -34,16 +33,8 @@ export const Profile = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const {
     userDetailLoading,
-    userData: { bio, website, fullName, profilePicture, userName },
+    userData: { bio, website, fullName, profilePicture, userName } = {},
   } = useSelector((store) => store.userDetail);
-  const { token } = useSelector((store) => store.authDetail);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (userDetailLoading === "idle") {
-      dispatch(getUserDetail(token));
-    }
-  }, [dispatch, userDetailLoading, token]);
 
   useEscape(setIsEditingProfile);
 
@@ -93,7 +84,7 @@ export const Profile = () => {
                   fontSize: "5rem",
                 }}
               >
-                {fullName.slice(0, 1)}
+                {fullName?.slice(0, 1)}
               </Avatar>
             )}
 
@@ -140,7 +131,6 @@ export const Profile = () => {
             <List
               sx={{
                 display: "flex",
-                borderBottom: 1,
                 py: "1rem",
               }}
             >

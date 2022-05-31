@@ -1,8 +1,14 @@
-import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import { Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
+import {
+  getAllPosts,
+  getAllUsers,
+  getUserDetail,
+} from "../firebase/firebase-calls";
 import { Login, Signup, Profile, Posts, Followers, Following } from "features";
-
 import {
   PrivateRoute,
   Home,
@@ -13,6 +19,21 @@ import {
 import "./App.css";
 
 function App() {
+  const { token } = useSelector((store) => store.authDetail);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token) dispatch(getUserDetail(token));
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    if (token) dispatch(getAllPosts());
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    if (token) dispatch(getAllUsers());
+  }, [dispatch, token]);
+
   return (
     <div>
       <Toaster

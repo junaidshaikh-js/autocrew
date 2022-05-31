@@ -4,5 +4,6 @@ import { Profile } from "./user-data/Profile";
 import { Posts } from "./user-data/components/Posts";
 import { Followers } from "./user-data/components/Followers";
 import { Following } from "./user-data/components/Following";
+import { Post } from "./posts/Post";
 
-export { Login, Signup, Profile, Posts, Followers, Following };
+export { Login, Signup, Profile, Posts, Followers, Following, Post };
