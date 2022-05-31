@@ -1,8 +1,19 @@
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { followUser } from "../firebase/firebase-calls";
-import { updateUserFollowing } from "features/user-data/userSlice";
-import { Avatar, Box, Button, Stack, Typography } from "utils/material-ui";
+import { followUser, unfollowUser } from "../firebase/firebase-calls";
+import {
+  updateUserFollowing,
+  updateUserUnfollow,
+} from "features/user-data/userSlice";
+import {
+  Avatar,
+  Box,
+  Button,
+  Stack,
+  Typography,
+  LoadingButton,
+} from "utils/material-ui";
 
 export const UserCard = ({ user }) => {
   const { profilePicture, fullName, userName } = user.data || {};
@@ -13,12 +24,29 @@ export const UserCard = ({ user }) => {
   );
   const dispatch = useDispatch();
 
+  const [isFollowingUser, setIsFollowingUser] = useState(false);
+
   const handleFollow = async () => {
     try {
+      setIsFollowingUser(true);
       await followUser(user.id, token);
       dispatch(updateUserFollowing(user.id));
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsFollowingUser(false);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      setIsFollowingUser(true);
+      await unfollowUser(user.id, token);
+      dispatch(updateUserUnfollow(user.id));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFollowingUser(false);
     }
   };
 
@@ -80,17 +108,54 @@ export const UserCard = ({ user }) => {
           ml: "auto !important",
         }}
       >
-        {!isUserFollowing && (
-          <Button
-            variant="outlined"
-            sx={{
-              p: 0,
-            }}
-            disableRipple
-            onClick={() => handleFollow()}
-          >
-            Follow
-          </Button>
+        {isUserFollowing ? (
+          <>
+            {isFollowingUser ? (
+              <LoadingButton
+                loading
+                variant="outlined"
+                sx={{
+                  p: 2,
+                }}
+              />
+            ) : (
+              <Button
+                variant="outlined"
+                sx={{
+                  p: 0,
+                  width: "90px",
+                }}
+                disableRipple
+                onClick={() => handleUnfollow()}
+              >
+                Unfollow
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            {isFollowingUser ? (
+              <LoadingButton
+                loading
+                variant="outlined"
+                sx={{
+                  p: 2,
+                }}
+              />
+            ) : (
+              <Button
+                variant="outlined"
+                sx={{
+                  p: 0,
+                  width: "90px",
+                }}
+                disableRipple
+                onClick={() => handleFollow()}
+              >
+                Follow
+              </Button>
+            )}
+          </>
         )}
       </Box>
     </Stack>
