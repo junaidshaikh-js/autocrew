@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
+import { dislikePost, likePost } from "../../firebase/firebase-calls";
+import { updatePostLike } from "features/posts/postSlice";
+import {
+  updateLikedPosts,
+  updateLikedPostsForDislike,
+} from "features/user-data/userSlice";
 import {
   Box,
   Stack,
@@ -12,16 +18,41 @@ import {
   FavoriteBorderIcon,
   CommentIcon,
   BookmarkBorderIcon,
+  FavoriteIcon,
 } from "utils/material-ui";
 
-export const Post = ({ postData }) => {
+export const Post = ({ post }) => {
   const { users } = useSelector((store) => store.users);
+  const { token } = useSelector((store) => store.authDetail);
+  const {
+    userDetails: { likedPost },
+  } = useSelector((store) => store.userDetail);
+  const dispatch = useDispatch();
 
-  const { postText, postImageUrl, postImageName, likes, comments } = postData;
+  const { postText, postImageUrl, postImageName, likes, comments } =
+    post?.data || {};
 
-  const postBy = users.find((user) => user.id === postData.postBy);
+  const postBy = users.find((user) => user.id === post?.data.postBy);
 
   const { data: { profilePicture, fullName, userName } = {} } = postBy || {};
+
+  const isPostLikedByCurrentUser = likedPost.likedPost.includes(post.id);
+
+  const handlePostLike = async (postAction) => {
+    try {
+      if (postAction) {
+        await dislikePost(post.id, token);
+        dispatch(updatePostLike({ id: post.id, count: -1 }));
+        dispatch(updateLikedPostsForDislike(post.id));
+      } else {
+        await likePost(post.id, token);
+        dispatch(updatePostLike({ id: post.id, count: 1 }));
+        dispatch(updateLikedPosts(post.id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Box component="article">
@@ -113,8 +144,23 @@ export const Post = ({ postData }) => {
               mt: 2,
             }}
           >
-            <IconButton aria-label="delete">
-              <FavoriteBorderIcon />
+            <IconButton
+              aria-label="Like"
+              onClick={() => {
+                isPostLikedByCurrentUser
+                  ? handlePostLike("dec")
+                  : handlePostLike();
+              }}
+            >
+              {isPostLikedByCurrentUser ? (
+                <FavoriteIcon
+                  sx={{
+                    color: "red",
+                  }}
+                />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
               {likes > 0 && (
                 <Typography
                   variant="span"
@@ -127,7 +173,7 @@ export const Post = ({ postData }) => {
                 </Typography>
               )}
             </IconButton>
-            <IconButton aria-label="delete">
+            <IconButton aria-label="Comment">
               <CommentIcon />
               {!comments && (
                 <Typography
@@ -137,11 +183,11 @@ export const Post = ({ postData }) => {
                     fontSize: "0.875rem",
                   }}
                 >
-                  {likes}
+                  {comments.length}
                 </Typography>
               )}
             </IconButton>
-            <IconButton aria-label="delete">
+            <IconButton aria-label="Bookmark">
               <BookmarkBorderIcon />
             </IconButton>
           </Stack>

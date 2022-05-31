@@ -33,6 +33,20 @@ const userSlice = createSlice({
         ),
       };
     },
+
+    updateLikedPosts: (state, action) => {
+      state.userDetails.likedPost.likedPost = [
+        ...state.userDetails.likedPost.likedPost,
+        action.payload,
+      ];
+    },
+
+    updateLikedPostsForDislike: (state, action) => {
+      state.userDetails.likedPost.likedPost =
+        state.userDetails.likedPost.likedPost.filter(
+          (post) => post !== action.payload
+        );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getUserDetail.pending, (state) => {
@@ -52,6 +66,8 @@ export const {
   updateUserDetailState,
   updateUserFollowing,
   updateUserUnfollow,
+  updateLikedPosts,
+  updateLikedPostsForDislike,
 } = userSlice.actions;
 
 export default userSlice.reducer;
