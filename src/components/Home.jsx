@@ -6,10 +6,17 @@ import { AddPost } from "./AddPost";
 import { Box, CircularProgress } from "utils/material-ui";
 
 export const Home = () => {
-  const { userDetailLoading } = useSelector((store) => store.userDetail);
+  const { userDetailLoading, userDetails: { following } = {} } = useSelector(
+    (store) => store.userDetail
+  );
   const { posts } = useSelector((store) => store.posts);
+  const { token } = useSelector((store) => store.authDetail);
 
   const [loadingPosts, setLoadingPosts] = useState(false);
+
+  const filteredPosts = posts.filter(({ postBy }) => {
+    return following?.following.includes(postBy) || postBy === token;
+  });
 
   return (
     <Box component="main" sx={{ border: 1 }}>
@@ -34,7 +41,7 @@ export const Home = () => {
           </Box>
 
           <Box component="section">
-            {posts.map((post) => (
+            {filteredPosts.map((post) => (
               <Post postData={post} key={post.dateCreated} />
             ))}
           </Box>
