@@ -7,6 +7,7 @@ import { Explore } from "./Explore";
 import { Bookmark } from "./Bookmark";
 import { Notification } from "./Notification";
 import { ProfileModal } from "./ProfileModal";
+import { UserCard } from "./UserCard";
 
 export {
   PrivateRoute,
@@ -18,4 +19,5 @@ export {
   Notification,
   ReactPortal,
   ProfileModal,
+  UserCard,
 };

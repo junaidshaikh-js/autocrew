@@ -21,7 +21,7 @@ const initialPostImageStatus = { url: "", fileName: "" };
 
 export const AddPost = ({ setLoadingPosts, loadingPosts }) => {
   const {
-    userData: { profilePicture },
+    userDetails: { userData: { profilePicture } = {} },
   } = useSelector((store) => store.userDetail);
   const { token } = useSelector((store) => store.authDetail);
   const dispatch = useDispatch();
@@ -75,6 +75,7 @@ export const AddPost = ({ setLoadingPosts, loadingPosts }) => {
       setPostText("");
       setPostImage(initialPostImageStatus);
       setLoadingPosts(false);
+      showEmojiPicker(false);
     } catch (error) {
       console.log(error);
       setLoadingPosts(false);

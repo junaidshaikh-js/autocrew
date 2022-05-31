@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   writeBatch,
   doc,
-  getDoc,
   updateDoc,
   addDoc,
   collection,
@@ -10,6 +9,7 @@ import {
   getDocs,
   query,
   orderBy,
+  arrayRemove,
 } from "firebase/firestore";
 
 import { updateUserDetailState } from "features/user-data/userSlice";
@@ -27,6 +27,8 @@ export const createUserDb = async (
 
     const userDataRef = doc(db, userId, "userData");
     const userPostsRef = doc(db, userId, "posts");
+    const userFollowersRef = doc(db, userId, "followers");
+    const userFollowingRef = doc(db, userId, "following");
     const usersRef = doc(db, "users", userId);
 
     const userData = {
@@ -43,6 +45,8 @@ export const createUserDb = async (
     batch.set(userDataRef, userData);
     batch.set(usersRef, userData);
     batch.set(userPostsRef, { posts: [] });
+    batch.set(userFollowersRef, { followers: [] });
+    batch.set(userFollowingRef, { following: [] });
 
     await batch.commit();
   } catch (error) {
@@ -54,13 +58,15 @@ export const getUserDetail = createAsyncThunk(
   "userDetail/getUserDetail",
   async (userId) => {
     try {
-      const dataRef = doc(db, userId, "userData");
+      const userData = {};
 
-      const dataSnap = await getDoc(dataRef);
+      const querySnapshot = await getDocs(collection(db, userId));
 
-      if (dataSnap.exists()) {
-        return dataSnap.data();
-      }
+      querySnapshot.forEach((doc) => {
+        userData[doc.id] = doc.data();
+      });
+
+      return userData;
     } catch (error) {
       console.log(error);
     }
@@ -140,3 +146,31 @@ export const getAllUsers = createAsyncThunk("users/getAllUsers", async () => {
 
   return users;
 });
+
+export const followUser = async (followedUserId, userId) => {
+  try {
+    const followingRef = doc(db, userId, "following");
+    await updateDoc(followingRef, { following: arrayUnion(followedUserId) });
+
+    const followedUserFollowingRef = doc(db, followedUserId, "followers");
+    await updateDoc(followedUserFollowingRef, {
+      followers: arrayUnion(userId),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unfollowUser = async (unfollowedUserId, userId) => {
+  try {
+    const followingRef = doc(db, userId, "following");
+    await updateDoc(followingRef, { following: arrayRemove(unfollowedUserId) });
+
+    const followedUserFollowingRef = doc(db, unfollowedUserId, "followers");
+    await updateDoc(followedUserFollowingRef, {
+      followers: arrayRemove(userId),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -35,7 +35,8 @@ export const GrayTextP = styled("p")({
   margin: 0,
   fontFamily: `"Roboto","Helvetica","Arial","sans-serif"`,
   fontWeight: 400,
-  fontSize: " 1rem",
+  fontSize: ".875rem",
   lineHeight: "1.5",
+  paddingLeft: "6px",
   letterSpacing: " 0.00938em",
 });

@@ -17,7 +17,16 @@ import {
 
 export const ProfileModal = ({ setShowModal }) => {
   const {
-    userData: { profilePicture, fullName, firstName, lastName, bio, website },
+    userDetails: {
+      userData: {
+        firstName,
+        lastName,
+        bio,
+        website,
+        fullName,
+        profilePicture,
+      } = {},
+    },
   } = useSelector((store) => store.userDetail);
   const { token } = useSelector((store) => store.authDetail);
   const dispatch = useDispatch();
