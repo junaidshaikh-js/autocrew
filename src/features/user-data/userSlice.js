@@ -5,16 +5,7 @@ import { statusConstants } from "utils/constants";
 const { idle, loading, fulfilled, rejected } = statusConstants;
 
 const initialState = {
-  userData: {
-    firstName: "",
-    lastName: "",
-    fullName: "",
-    userName: "",
-    email: "",
-    bio: "",
-    website: "",
-    profilePicture: "",
-  },
+  userDetails: {},
   userDetailLoading: idle,
 };
 
@@ -23,7 +14,24 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     updateUserDetailState: (state, action) => {
-      state.userData = { ...state.userData, ...action.payload };
+      state.userDetails.userData = {
+        ...state.userDetails.userData,
+        ...action.payload,
+      };
+    },
+
+    updateUserFollowing: (state, action) => {
+      state.userDetails.following = {
+        following: [...state.userDetails.following.following, action.payload],
+      };
+    },
+
+    updateUserUnfollow: (state, action) => {
+      state.userDetails.following = {
+        following: state.userDetails.following.following.filter(
+          (_user) => _user !== action.payload
+        ),
+      };
     },
   },
   extraReducers: (builder) => {
@@ -32,7 +40,7 @@ const userSlice = createSlice({
     });
     builder.addCase(getUserDetail.fulfilled, (state, action) => {
       state.userDetailLoading = fulfilled;
-      state.userData = action.payload;
+      state.userDetails = action.payload;
     });
     builder.addCase(getUserDetail.rejected, (state) => {
       state.userDetailLoading = rejected;
@@ -40,6 +48,10 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateUserDetailState } = userSlice.actions;
+export const {
+  updateUserDetailState,
+  updateUserFollowing,
+  updateUserUnfollow,
+} = userSlice.actions;
 
 export default userSlice.reducer;
