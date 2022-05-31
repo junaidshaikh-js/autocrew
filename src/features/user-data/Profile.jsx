@@ -33,7 +33,11 @@ export const Profile = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const {
     userDetailLoading,
-    userData: { bio, website, fullName, profilePicture, userName } = {},
+    userDetails: {
+      userData: { bio, website, fullName, profilePicture, userName } = {},
+      followers,
+      following,
+    },
   } = useSelector((store) => store.userDetail);
 
   useEscape(setIsEditingProfile);
@@ -165,7 +169,9 @@ export const Profile = () => {
                   className={classes.button}
                   fullWidth
                 >
-                  <ListItemText primary="Followers" />
+                  <ListItemText
+                    primary={`Followers (${followers?.followers.length})`}
+                  />
                 </Button>
               </ListItem>
 
@@ -182,7 +188,9 @@ export const Profile = () => {
                   className={classes.button}
                   fullWidth
                 >
-                  <ListItemText primary="Following" />
+                  <ListItemText
+                    primary={`Following (${following?.following.length})`}
+                  />
                 </Button>
               </ListItem>
             </List>
