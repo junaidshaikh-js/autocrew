@@ -11,7 +11,7 @@ export const SideInfoContainer = () => {
   const { token } = useSelector((store) => store.authDetail);
 
   const usersToRecommend = users.filter(
-    (user) => !following.following.includes(user.id) && user.id !== token
+    (user) => !following?.following.includes(user.id) && user.id !== token
   );
 
   return (
