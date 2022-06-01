@@ -32,9 +32,15 @@ export const Bookmark = () => {
         </Typography>
       </Box>
       <Box component="section">
-        {postBookmarkedByUser.map((post) => (
-          <Post post={post} key={post.data.dateCreated} />
-        ))}
+        {postBookmarkedByUser.length ? (
+          postBookmarkedByUser.map((post) => (
+            <Post post={post} key={post.data.dateCreated} />
+          ))
+        ) : (
+          <Box component="section" my={4} textAlign="center">
+            <Typography variant="h4">No posts found</Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );
