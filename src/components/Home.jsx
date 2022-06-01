@@ -14,8 +14,10 @@ export const Home = () => {
 
   const [loadingPosts, setLoadingPosts] = useState(false);
 
-  const filteredPosts = posts.filter(({ postBy }) => {
-    return following?.following.includes(postBy) || postBy === token;
+  const filteredPosts = posts.filter(({ data }) => {
+    return (
+      following?.following.includes(data?.postBy) || data?.postBy === token
+    );
   });
 
   return (
@@ -42,7 +44,7 @@ export const Home = () => {
 
           <Box component="section">
             {filteredPosts.map((post) => (
-              <Post postData={post} key={post.dateCreated} />
+              <Post post={post} key={post?.data.dateCreated} />
             ))}
           </Box>
         </>

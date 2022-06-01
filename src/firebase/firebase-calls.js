@@ -10,6 +10,7 @@ import {
   query,
   orderBy,
   arrayRemove,
+  increment,
 } from "firebase/firestore";
 
 import { updateUserDetailState } from "features/user-data/userSlice";
@@ -29,6 +30,7 @@ export const createUserDb = async (
     const userPostsRef = doc(db, userId, "posts");
     const userFollowersRef = doc(db, userId, "followers");
     const userFollowingRef = doc(db, userId, "following");
+    const userLikedPostRef = doc(db, userId, "likedPost");
     const usersRef = doc(db, "users", userId);
 
     const userData = {
@@ -47,6 +49,7 @@ export const createUserDb = async (
     batch.set(userPostsRef, { posts: [] });
     batch.set(userFollowersRef, { followers: [] });
     batch.set(userFollowingRef, { following: [] });
+    batch.set(userLikedPostRef, { likedPost: [] });
 
     await batch.commit();
   } catch (error) {
@@ -129,7 +132,7 @@ export const getAllPosts = createAsyncThunk("posts/getAllPosts/", async () => {
   const querySnapshot = await getDocs(q);
 
   querySnapshot.forEach((doc) => {
-    posts.push(doc.data());
+    posts.push({ id: doc.id, data: doc.data() });
   });
 
   return posts;
@@ -169,6 +172,40 @@ export const unfollowUser = async (unfollowedUserId, userId) => {
     const followedUserFollowingRef = doc(db, unfollowedUserId, "followers");
     await updateDoc(followedUserFollowingRef, {
       followers: arrayRemove(userId),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const likePost = async (postId, userId) => {
+  try {
+    const userLikedPostRef = doc(db, userId, "likedPost");
+    const postDocRef = doc(db, "posts", postId);
+
+    await updateDoc(userLikedPostRef, {
+      likedPost: arrayUnion(postId),
+    });
+
+    await updateDoc(postDocRef, {
+      likes: increment(1),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const dislikePost = async (postId, userId) => {
+  try {
+    const userLikedPostRef = doc(db, userId, "likedPost");
+    const postDocRef = doc(db, "posts", postId);
+
+    await updateDoc(userLikedPostRef, {
+      likedPost: arrayRemove(postId),
+    });
+
+    await updateDoc(postDocRef, {
+      likes: increment(-1),
     });
   } catch (error) {
     console.log(error);

@@ -26,7 +26,7 @@ export const Explore = () => {
       </Box>
       <Box component="section">
         {posts.map((post) => (
-          <Post postData={post} key={post.dateCreated} />
+          <Post post={post} key={post.dateCreated} />
         ))}
       </Box>
     </Box>
