@@ -61,6 +61,19 @@ const userSlice = createSlice({
           (post) => post !== action.payload
         );
     },
+
+    addUserPost: (state, action) => {
+      state.userDetails.posts.posts = [
+        ...state.userDetails.posts.posts,
+        action.payload,
+      ];
+    },
+
+    deleteUserPost: (state, action) => {
+      state.userDetails.posts.posts = state.userDetails.posts.posts.filter(
+        (post) => post !== action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getUserDetail.pending, (state) => {
@@ -84,6 +97,8 @@ export const {
   updateLikedPostsForDislike,
   addToBookmark,
   removeFromBookmark,
+  addUserPost,
+  deleteUserPost,
 } = userSlice.actions;
 
 export default userSlice.reducer;
