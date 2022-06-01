@@ -31,6 +31,7 @@ export const createUserDb = async (
     const userFollowersRef = doc(db, userId, "followers");
     const userFollowingRef = doc(db, userId, "following");
     const userLikedPostRef = doc(db, userId, "likedPost");
+    const userBookmarkedPosts = doc(db, userId, "bookmarks");
     const usersRef = doc(db, "users", userId);
 
     const userData = {
@@ -50,6 +51,7 @@ export const createUserDb = async (
     batch.set(userFollowersRef, { followers: [] });
     batch.set(userFollowingRef, { following: [] });
     batch.set(userLikedPostRef, { likedPost: [] });
+    batch.set(userBookmarkedPosts, { bookmarks: [] });
 
     await batch.commit();
   } catch (error) {
@@ -206,6 +208,30 @@ export const dislikePost = async (postId, userId) => {
 
     await updateDoc(postDocRef, {
       likes: increment(-1),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const bookmarkPost = async (postId, userId) => {
+  try {
+    const bookmarkDocRef = doc(db, userId, "bookmarks");
+
+    await updateDoc(bookmarkDocRef, {
+      bookmarks: arrayUnion(postId),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removePostFromBookmark = async (postId, userId) => {
+  try {
+    const bookmarkDocRef = doc(db, userId, "bookmarks");
+
+    await updateDoc(bookmarkDocRef, {
+      bookmarks: arrayRemove(postId),
     });
   } catch (error) {
     console.log(error);
