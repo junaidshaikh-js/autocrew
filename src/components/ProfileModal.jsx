@@ -130,7 +130,7 @@ export const ProfileModal = ({ setShowModal }) => {
                 </Button>
               )}
               <Button variant="outlined" onClick={() => setShowModal(false)}>
-                Cancle
+                Cancel
               </Button>
             </Stack>
           </Stack>
