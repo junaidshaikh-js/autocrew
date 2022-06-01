@@ -1,11 +1,19 @@
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 
-import { dislikePost, likePost } from "../../firebase/firebase-calls";
+import {
+  bookmarkPost,
+  dislikePost,
+  likePost,
+  removePostFromBookmark,
+} from "../../firebase/firebase-calls";
 import { updatePostLike } from "features/posts/postSlice";
 import {
   updateLikedPosts,
   updateLikedPostsForDislike,
+  addToBookmark,
+  removeFromBookmark,
 } from "features/user-data/userSlice";
 import {
   Box,
@@ -19,13 +27,14 @@ import {
   CommentIcon,
   BookmarkBorderIcon,
   FavoriteIcon,
+  BookmarkIcon,
 } from "utils/material-ui";
 
 export const Post = ({ post }) => {
   const { users } = useSelector((store) => store.users);
   const { token } = useSelector((store) => store.authDetail);
   const {
-    userDetails: { likedPost },
+    userDetails: { likedPost, bookmarks },
   } = useSelector((store) => store.userDetail);
   const dispatch = useDispatch();
 
@@ -37,6 +46,7 @@ export const Post = ({ post }) => {
   const { data: { profilePicture, fullName, userName } = {} } = postBy || {};
 
   const isPostLikedByCurrentUser = likedPost.likedPost.includes(post.id);
+  const isPostBookmarkedByCurrentUser = bookmarks.bookmarks.includes(post.id);
 
   const handlePostLike = async (postAction) => {
     try {
@@ -48,6 +58,22 @@ export const Post = ({ post }) => {
         await likePost(post.id, token);
         dispatch(updatePostLike({ id: post.id, count: 1 }));
         dispatch(updateLikedPosts(post.id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBookmark = async (postAction) => {
+    try {
+      if (postAction === "remove") {
+        await removePostFromBookmark(post.id, token);
+        dispatch(removeFromBookmark(post.id));
+        toast.success("Post removed from bookmark");
+      } else {
+        await bookmarkPost(post.id, token);
+        dispatch(addToBookmark(post.id));
+        toast.success("Post bookmarked");
       }
     } catch (error) {
       console.log(error);
@@ -173,6 +199,7 @@ export const Post = ({ post }) => {
                 </Typography>
               )}
             </IconButton>
+
             <IconButton aria-label="Comment">
               <CommentIcon />
               {!comments && (
@@ -187,8 +214,20 @@ export const Post = ({ post }) => {
                 </Typography>
               )}
             </IconButton>
-            <IconButton aria-label="Bookmark">
-              <BookmarkBorderIcon />
+
+            <IconButton
+              aria-label="Bookmark"
+              onClick={() => {
+                isPostBookmarkedByCurrentUser
+                  ? handleBookmark("remove")
+                  : handleBookmark();
+              }}
+            >
+              {isPostBookmarkedByCurrentUser ? (
+                <BookmarkIcon />
+              ) : (
+                <BookmarkBorderIcon />
+              )}
             </IconButton>
           </Stack>
         </Box>
