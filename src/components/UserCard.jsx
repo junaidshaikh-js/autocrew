@@ -99,7 +99,7 @@ export const UserCard = ({ user }) => {
           }}
           fontSize="0.75rem"
         >
-          {userName}
+          @{userName}
         </Typography>
       </Box>
 
