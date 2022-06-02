@@ -11,7 +11,6 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     updatePostLike: (state, action) => {
-      console.log(action);
       state.posts = state.posts.map((_post) => {
         if (_post.id === action.payload.id) {
           return {
@@ -26,7 +25,30 @@ const postSlice = createSlice({
         return _post;
       });
     },
+
+    updatePostsForDelete: (state, action) => {
+      state.posts = state.posts.filter((_post) => _post.id !== action.payload);
+    },
+
+    updatePostData: (state, action) => {
+      state.posts = state.posts.map((_post) => {
+        if (_post.id === action.payload.id) {
+          return {
+            ..._post,
+            data: {
+              ..._post.data,
+              postText: action.payload.postText,
+              postImageUrl: action.payload.postImage.url,
+              postImageName: action.payload.postImage.postImageName,
+            },
+          };
+        }
+
+        return _post;
+      });
+    },
   },
+
   extraReducers: (builder) => {
     builder.addCase(getAllPosts.fulfilled, (state, action) => {
       state.posts = action.payload;
@@ -34,6 +56,7 @@ const postSlice = createSlice({
   },
 });
 
-export const { updatePostLike } = postSlice.actions;
+export const { updatePostLike, updatePostsForDelete, updatePostData } =
+  postSlice.actions;
 
 export default postSlice.reducer;

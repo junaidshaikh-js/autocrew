@@ -11,6 +11,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export {
   HomeOutlinedIcon,
@@ -26,4 +27,5 @@ export {
   BookmarkBorderIcon,
   BookmarkIcon,
   FavoriteIcon,
+  MoreVertIcon,
 };

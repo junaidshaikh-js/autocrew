@@ -11,6 +11,7 @@ import {
   orderBy,
   arrayRemove,
   increment,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { updateUserDetailState } from "features/user-data/userSlice";
@@ -104,7 +105,7 @@ export const updateUserDetail = async (userId, updatedUserDetail, dispatch) => {
   }
 };
 
-export const addNewPost = async (userId, postText, postImage, dispatch) => {
+export const addNewPost = async (userId, postText, postImage) => {
   try {
     const userPostsRef = doc(db, userId, "posts");
 
@@ -119,6 +120,8 @@ export const addNewPost = async (userId, postText, postImage, dispatch) => {
     });
 
     await updateDoc(userPostsRef, { posts: arrayUnion(docRef.id) });
+
+    return docRef.id;
   } catch (error) {
     console.log(error);
   }
@@ -232,6 +235,34 @@ export const removePostFromBookmark = async (postId, userId) => {
 
     await updateDoc(bookmarkDocRef, {
       bookmarks: arrayRemove(postId),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletePost = async (postId, userId) => {
+  try {
+    const postRef = doc(db, "posts", postId);
+    await deleteDoc(postRef);
+
+    const userPostRef = doc(db, userId, "posts");
+    await updateDoc(userPostRef, {
+      posts: arrayRemove(postId),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updatePost = async (postId, postText, postImage) => {
+  try {
+    const postRef = doc(db, "posts", postId);
+
+    await updateDoc(postRef, {
+      postText: postText,
+      postImageUrl: postImage.url,
+      postImageName: postImage.postImageName,
     });
   } catch (error) {
     console.log(error);

@@ -1,20 +1,25 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
   bookmarkPost,
+  deletePost,
   dislikePost,
   likePost,
   removePostFromBookmark,
 } from "../../firebase/firebase-calls";
-import { updatePostLike } from "features/posts/postSlice";
+import { updatePostLike, updatePostsForDelete } from "features/posts/postSlice";
 import {
   updateLikedPosts,
   updateLikedPostsForDislike,
   addToBookmark,
   removeFromBookmark,
+  deleteUserPost,
 } from "features/user-data/userSlice";
+import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
+import { EditPostModal } from "./components/EditPostModal";
 import {
   Box,
   Stack,
@@ -28,15 +33,29 @@ import {
   BookmarkBorderIcon,
   FavoriteIcon,
   BookmarkIcon,
+  MoreVertIcon,
+  Menu,
+  MenuItem,
 } from "utils/material-ui";
+import { ReactPortal } from "components";
+import { useEscape } from "hooks";
 
 export const Post = ({ post }) => {
   const { users } = useSelector((store) => store.users);
   const { token } = useSelector((store) => store.authDetail);
   const {
-    userDetails: { likedPost, bookmarks },
+    userDetails: { likedPost, bookmarks, posts },
   } = useSelector((store) => store.userDetail);
   const dispatch = useDispatch();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [showEditPostModal, setShowEditPostModal] = useState(false);
+  const open = Boolean(anchorEl);
+  const handleMenuClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
 
   const { postText, postImageUrl, postImageName, likes, comments } =
     post?.data || {};
@@ -47,6 +66,7 @@ export const Post = ({ post }) => {
 
   const isPostLikedByCurrentUser = likedPost.likedPost.includes(post.id);
   const isPostBookmarkedByCurrentUser = bookmarks.bookmarks.includes(post.id);
+  const isPostPostedByCurrentUser = posts.posts.includes(post.id);
 
   const handlePostLike = async (postAction) => {
     try {
@@ -79,6 +99,19 @@ export const Post = ({ post }) => {
       console.log(error);
     }
   };
+
+  const handlePostDelete = async () => {
+    try {
+      await deletePost(post.id, token);
+      dispatch(deleteUserPost(post.id));
+      dispatch(updatePostsForDelete(post.id));
+      toast.success("Post deleted");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEscape(setShowDeleteConfirmationModal);
 
   return (
     <Box component="article">
@@ -231,7 +264,67 @@ export const Post = ({ post }) => {
             </IconButton>
           </Stack>
         </Box>
+
+        {isPostPostedByCurrentUser && (
+          <Box
+            sx={{
+              alignSelf: "flex-start",
+            }}
+          >
+            <IconButton
+              id="menu-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={(e) => handleMenuClick(e)}
+            >
+              <MoreVertIcon />
+            </IconButton>
+
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => setAnchorEl(null)}
+              MenuListProps={{
+                "aria-labelledby": "menu-button",
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  setShowEditPostModal(true);
+                  setAnchorEl(false);
+                }}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setShowDeleteConfirmationModal(true);
+                  setAnchorEl(false);
+                }}
+              >
+                Delete
+              </MenuItem>
+            </Menu>
+          </Box>
+        )}
       </Stack>
+
+      {showDeleteConfirmationModal && (
+        <ReactPortal>
+          <DeleteConfirmationModal
+            showModal={setShowDeleteConfirmationModal}
+            handleDelete={handlePostDelete}
+          />
+        </ReactPortal>
+      )}
+
+      {showEditPostModal && (
+        <ReactPortal>
+          <EditPostModal showModal={setShowEditPostModal} post={post} />
+        </ReactPortal>
+      )}
     </Box>
   );
 };

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { addNewPost, getAllPosts } from "../firebase/firebase-calls";
+import { addUserPost } from "features/user-data/userSlice";
 import {
   Stack,
   Button,
@@ -69,8 +70,8 @@ export const AddPost = ({ setLoadingPosts, loadingPosts }) => {
     try {
       setLoadingPosts(true);
 
-      await addNewPost(token, postText, postImage);
-
+      const postId = await addNewPost(token, postText, postImage);
+      dispatch(addUserPost(postId));
       dispatch(getAllPosts());
       setPostText("");
       setPostImage(initialPostImageStatus);

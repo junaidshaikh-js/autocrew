@@ -7,6 +7,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import CircularProgress from "@mui/material/CircularProgress";
 import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 export {
   Container,
@@ -28,6 +30,8 @@ export {
   Grid,
   CircularProgress,
   Avatar,
+  Menu,
+  MenuItem,
 };
 
 export const GrayTextP = styled("p")({
