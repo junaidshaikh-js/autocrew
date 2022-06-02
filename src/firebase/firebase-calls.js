@@ -268,3 +268,27 @@ export const updatePost = async (postId, postText, postImage) => {
     console.log(error);
   }
 };
+
+export const addComment = async (postId, comment) => {
+  try {
+    const postRef = doc(db, "posts", postId);
+
+    await updateDoc(postRef, {
+      comments: arrayUnion(comment),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteComment = async (postId, comment) => {
+  try {
+    const postRef = doc(db, "posts", postId);
+
+    await updateDoc(postRef, {
+      comments: arrayRemove(comment),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
