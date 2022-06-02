@@ -1,4 +1,4 @@
-import { styled, Grid } from "@material-ui/core";
+import { styled, Grid, Collapse } from "@material-ui/core";
 import LoadingButton from "@mui/lab/LoadingButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -32,6 +32,7 @@ export {
   Avatar,
   Menu,
   MenuItem,
+  Collapse,
 };
 
 export const GrayTextP = styled("p")({

@@ -102,7 +102,7 @@ export const Profile = () => {
               {fullName}
             </Typography>
 
-            <GrayTextP>{userName}</GrayTextP>
+            <GrayTextP>@{userName}</GrayTextP>
 
             <Button onClick={() => setIsEditingProfile(true)}>
               Edit Profile

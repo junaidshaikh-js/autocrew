@@ -20,6 +20,7 @@ import {
 } from "features/user-data/userSlice";
 import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
 import { EditPostModal } from "./components/EditPostModal";
+import { CommentSection } from "./components/CommentSection";
 import {
   Box,
   Stack,
@@ -36,6 +37,7 @@ import {
   MoreVertIcon,
   Menu,
   MenuItem,
+  Collapse,
 } from "utils/material-ui";
 import { ReactPortal } from "components";
 import { useEscape } from "hooks";
@@ -52,10 +54,8 @@ export const Post = ({ post }) => {
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [showEditPostModal, setShowEditPostModal] = useState(false);
+  const [showCommentSection, setShowCommentSection] = useState(false);
   const open = Boolean(anchorEl);
-  const handleMenuClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
 
   const { postText, postImageUrl, postImageName, likes, comments } =
     post?.data || {};
@@ -111,6 +111,10 @@ export const Post = ({ post }) => {
     }
   };
 
+  const handleMenuClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
   useEscape(setShowDeleteConfirmationModal);
 
   return (
@@ -164,7 +168,7 @@ export const Post = ({ post }) => {
             }}
           >
             <Typography>{fullName}</Typography>
-            <GrayTextP>{userName}</GrayTextP>
+            <GrayTextP>@{userName}</GrayTextP>
           </Stack>
 
           <Box>
@@ -233,9 +237,12 @@ export const Post = ({ post }) => {
               )}
             </IconButton>
 
-            <IconButton aria-label="Comment">
+            <IconButton
+              aria-label="Comment"
+              onClick={() => setShowCommentSection((s) => !s)}
+            >
               <CommentIcon />
-              {!comments && (
+              {comments.length !== 0 && (
                 <Typography
                   variant="span"
                   sx={{
@@ -325,6 +332,10 @@ export const Post = ({ post }) => {
           <EditPostModal showModal={setShowEditPostModal} post={post} />
         </ReactPortal>
       )}
+
+      <Collapse in={showCommentSection}>
+        <CommentSection post={post} />
+      </Collapse>
     </Box>
   );
 };
