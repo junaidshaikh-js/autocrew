@@ -8,7 +8,15 @@ import {
   getAllUsers,
   getUserDetail,
 } from "../firebase/firebase-calls";
-import { Login, Signup, Profile, Posts, Followers, Following } from "features";
+import {
+  Login,
+  Signup,
+  Profile,
+  Posts,
+  Followers,
+  Following,
+  ThirdPersonPage,
+} from "features";
 import {
   PrivateRoute,
   Home,
@@ -53,6 +61,7 @@ function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/bookmarks" element={<Bookmark />} />
           <Route path="/notifications" element={<Notification />} />
+          <Route path="/:userId" element={<ThirdPersonPage />} />
           <Route path="/profile" element={<Profile />}>
             <Route path="/profile" element={<Posts />} />
             <Route path="/profile/followers" element={<Followers />} />
