@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { NotificationCard } from "./NotificationCard";
 import { Box } from "utils/material-ui";
@@ -6,9 +7,9 @@ import { Box } from "utils/material-ui";
 export const Notification = () => {
   const { users } = useSelector((store) => store.users);
   const { posts } = useSelector((store) => store.posts);
-  const { userDetails: { notifications } = {} } = useSelector(
-    (store) => store.userDetail
-  );
+  const {
+    userDetails: { notifications },
+  } = useSelector((store) => store.userDetail);
 
   return (
     <Box
@@ -24,7 +25,18 @@ export const Notification = () => {
               (_user) => _user.id === _notification.notificationDetails
             );
 
-            return <NotificationCard type="follow" user={user} />;
+            return (
+              <Box
+                component={Link}
+                to={`/${user?.id}`}
+                sx={{
+                  textDecoration: "none",
+                  color: "currentcolor",
+                }}
+              >
+                <NotificationCard type="follow" user={user} />
+              </Box>
+            );
           }
 
           if (_notification.notificationType === "like") {

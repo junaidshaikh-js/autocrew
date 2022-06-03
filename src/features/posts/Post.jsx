@@ -142,27 +142,25 @@ export const Post = ({ post }) => {
           borderTop: 1,
         }}
       >
-        <Box>
-          <Button
-            component={Link}
-            to="/profile"
+        <Box
+          component={Link}
+          to={isPostPostedByCurrentUser ? "/profile" : `/${postBy?.id}`}
+          sx={{
+            borderRadius: "999px",
+          }}
+        >
+          <Avatar
             sx={{
-              borderRadius: "999px",
+              bgcolor: "#1565C0",
+              width: 60,
+              height: 60,
+              fontSize: "3rem",
+              mx: "auto",
+              objectFit: "contain",
+              border: 1,
             }}
-          >
-            <Avatar
-              sx={{
-                bgcolor: "#1565C0",
-                width: 60,
-                height: 60,
-                fontSize: "3rem",
-                mx: "auto",
-                objectFit: "contain",
-                border: 1,
-              }}
-              src={profilePicture}
-            />
-          </Button>
+            src={profilePicture}
+          />
         </Box>
 
         <Box
@@ -174,7 +172,6 @@ export const Post = ({ post }) => {
           <Stack
             spacing={1}
             sx={{
-              mt: 1,
               mb: "0.5rem",
               flexDirection: { sm: "column", md: "row" },
             }}

@@ -104,7 +104,6 @@ export const SideNavigation = () => {
             </Button>
           </ListItem>
 
-          {/* TODO: change profile route with username */}
           <ListItem>
             <Button
               component={NavLink}
