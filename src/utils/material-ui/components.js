@@ -9,6 +9,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Checkbox from "@mui/material/Checkbox";
 
 export {
   Container,
@@ -33,11 +34,12 @@ export {
   Menu,
   MenuItem,
   Collapse,
+  Checkbox,
 };
 
 export const GrayTextP = styled("p")({
   color: "#9e9e9e",
-  margin: 0,
+  margin: "0 !important",
   fontFamily: `"Roboto","Helvetica","Arial","sans-serif"`,
   fontWeight: 400,
   fontSize: ".875rem",
