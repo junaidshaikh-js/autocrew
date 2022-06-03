@@ -35,7 +35,7 @@ export const CommentSection = ({ post: { id, data } }) => {
         commentText,
       };
 
-      await addComment(id, comment);
+      await addComment(id, comment, data.postBy);
       dispatch(updatePostComment({ id, comment }));
       setCommentText("");
     } catch (error) {
