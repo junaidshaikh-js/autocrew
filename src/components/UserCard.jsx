@@ -1,54 +1,15 @@
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import { followUser, unfollowUser } from "../firebase/firebase-calls";
-import {
-  updateUserFollowing,
-  updateUserUnfollow,
-} from "features/user-data/userSlice";
-import {
-  Avatar,
-  Box,
-  Button,
-  Stack,
-  Typography,
-  LoadingButton,
-} from "utils/material-ui";
+import { Avatar, Box, Stack, Typography } from "utils/material-ui";
+import { FollowUnfollowButton } from "./FollowUnfollowButton";
 
 export const UserCard = ({ user }) => {
   const { profilePicture, fullName, userName } = user.data || {};
 
-  const { token } = useSelector((store) => store.authDetail);
-  const { userDetails: { following } = {} } = useSelector(
-    (store) => store.userDetail
-  );
-  const dispatch = useDispatch();
-
-  const [isFollowingUser, setIsFollowingUser] = useState(false);
-
-  const handleFollow = async () => {
-    try {
-      setIsFollowingUser(true);
-      await followUser(user.id, token);
-      dispatch(updateUserFollowing(user.id));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsFollowingUser(false);
-    }
-  };
-
-  const handleUnfollow = async () => {
-    try {
-      setIsFollowingUser(true);
-      await unfollowUser(user.id, token);
-      dispatch(updateUserUnfollow(user.id));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsFollowingUser(false);
-    }
-  };
+  const {
+    userDetails: { following },
+  } = useSelector((store) => store.userDetail);
 
   const isUserFollowing = following?.following.includes(user.id);
 
@@ -63,12 +24,18 @@ export const UserCard = ({ user }) => {
         mr: "0.5rem",
       }}
     >
-      <Box>
-        <Button
-          sx={{
-            borderRadius: "999px",
-          }}
-        >
+      <Stack
+        direction="row"
+        component={Link}
+        to={`/${user?.id}`}
+        sx={{
+          textDecoration: "none",
+          color: "currentcolor",
+          ml: 1,
+          flexGrow: 1,
+        }}
+      >
+        <Box>
           <Avatar
             sx={{
               bgcolor: "#1565C0",
@@ -80,83 +47,38 @@ export const UserCard = ({ user }) => {
             }}
             src={profilePicture}
           />
-        </Button>
-      </Box>
+        </Box>
 
-      <Box
-        sx={{
-          ml: "0 !important",
-        }}
-      >
-        <Typography ml={0} fontSize="0.875rem">
-          {fullName}
-        </Typography>
-
-        <Typography
-          ml={0}
+        <Box
           sx={{
-            color: "#9e9e9e",
+            ml: "0.5rem !important",
           }}
-          fontSize="0.75rem"
         >
-          @{userName}
-        </Typography>
-      </Box>
+          <Typography ml={0} fontSize="0.875rem">
+            {fullName}
+          </Typography>
+
+          <Typography
+            ml={0}
+            sx={{
+              color: "#9e9e9e",
+            }}
+            fontSize="0.75rem"
+          >
+            @{userName}
+          </Typography>
+        </Box>
+      </Stack>
 
       <Box
         sx={{
           ml: "auto !important",
         }}
       >
-        {isUserFollowing ? (
-          <>
-            {isFollowingUser ? (
-              <LoadingButton
-                loading
-                variant="outlined"
-                sx={{
-                  p: 2,
-                }}
-              />
-            ) : (
-              <Button
-                variant="outlined"
-                sx={{
-                  p: 0,
-                  width: "90px",
-                }}
-                disableRipple
-                onClick={() => handleUnfollow()}
-              >
-                Unfollow
-              </Button>
-            )}
-          </>
-        ) : (
-          <>
-            {isFollowingUser ? (
-              <LoadingButton
-                loading
-                variant="outlined"
-                sx={{
-                  p: 2,
-                }}
-              />
-            ) : (
-              <Button
-                variant="outlined"
-                sx={{
-                  p: 0,
-                  width: "90px",
-                }}
-                disableRipple
-                onClick={() => handleFollow()}
-              >
-                Follow
-              </Button>
-            )}
-          </>
-        )}
+        <FollowUnfollowButton
+          isUserFollowing={isUserFollowing}
+          userId={user.id}
+        />
       </Box>
     </Stack>
   );
