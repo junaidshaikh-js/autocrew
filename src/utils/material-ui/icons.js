@@ -13,6 +13,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 
 export {
   HomeOutlinedIcon,
@@ -30,4 +31,5 @@ export {
   FavoriteIcon,
   MoreVertIcon,
   FilterListIcon,
+  PermIdentityIcon,
 };

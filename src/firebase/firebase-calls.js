@@ -33,6 +33,7 @@ export const createUserDb = async (
     const userFollowingRef = doc(db, userId, "following");
     const userLikedPostRef = doc(db, userId, "likedPost");
     const userBookmarkedPosts = doc(db, userId, "bookmarks");
+    const userNotificationRef = doc(db, userId, "notifications");
     const usersRef = doc(db, "users", userId);
 
     const userData = {
@@ -53,6 +54,7 @@ export const createUserDb = async (
     batch.set(userFollowingRef, { following: [] });
     batch.set(userLikedPostRef, { likedPost: [] });
     batch.set(userBookmarkedPosts, { bookmarks: [] });
+    batch.set(userNotificationRef, { notifications: [] });
 
     await batch.commit();
   } catch (error) {
@@ -164,6 +166,18 @@ export const followUser = async (followedUserId, userId) => {
     await updateDoc(followedUserFollowingRef, {
       followers: arrayUnion(userId),
     });
+
+    const followedUserNotificationRef = doc(
+      db,
+      followedUserId,
+      "notifications"
+    );
+    await updateDoc(followedUserNotificationRef, {
+      notifications: arrayUnion({
+        notificationType: "follow",
+        notificationDetails: userId,
+      }),
+    });
   } catch (error) {
     console.log(error);
   }
@@ -183,10 +197,19 @@ export const unfollowUser = async (unfollowedUserId, userId) => {
   }
 };
 
-export const likePost = async (postId, userId) => {
+export const likePost = async (postId, userId, postBy) => {
   try {
     const userLikedPostRef = doc(db, userId, "likedPost");
     const postDocRef = doc(db, "posts", postId);
+    const postByUserNotificationRef = doc(db, postBy, "notifications");
+
+    await updateDoc(postByUserNotificationRef, {
+      notifications: arrayUnion({
+        notificationType: "like",
+        postId,
+        notificationDetails: userId,
+      }),
+    });
 
     await updateDoc(userLikedPostRef, {
       likedPost: arrayUnion(postId),
@@ -269,9 +292,18 @@ export const updatePost = async (postId, postText, postImage) => {
   }
 };
 
-export const addComment = async (postId, comment) => {
+export const addComment = async (postId, comment, postBy) => {
   try {
     const postRef = doc(db, "posts", postId);
+    const postByUserNotificationRef = doc(db, postBy, "notifications");
+
+    await updateDoc(postByUserNotificationRef, {
+      notifications: arrayUnion({
+        notificationType: "comment",
+        postId,
+        notificationDetails: comment.commentBy,
+      }),
+    });
 
     await updateDoc(postRef, {
       comments: arrayUnion(comment),

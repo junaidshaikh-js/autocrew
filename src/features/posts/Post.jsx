@@ -21,6 +21,9 @@ import {
 import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
 import { EditPostModal } from "./components/EditPostModal";
 import { CommentSection } from "./components/CommentSection";
+import { ReactPortal } from "components";
+import { useEscape } from "hooks";
+import { getPostTime } from "./utils";
 import {
   Box,
   Stack,
@@ -39,8 +42,6 @@ import {
   MenuItem,
   Collapse,
 } from "utils/material-ui";
-import { ReactPortal } from "components";
-import { useEscape } from "hooks";
 
 export const Post = ({ post }) => {
   const { users } = useSelector((store) => store.users);
@@ -81,7 +82,7 @@ export const Post = ({ post }) => {
         dispatch(updatePostLike({ id: post.id, count: -1 }));
         dispatch(updateLikedPostsForDislike(post.id));
       } else {
-        await likePost(post.id, token);
+        await likePost(post.id, token, postBy.id);
         dispatch(updatePostLike({ id: post.id, count: 1 }));
         dispatch(updateLikedPosts(post.id));
       }
@@ -119,37 +120,6 @@ export const Post = ({ post }) => {
 
   const handleMenuClick = (e) => {
     setAnchorEl(e.currentTarget);
-  };
-
-  const getPostTime = (dateCreated) => {
-    let now = Date.now();
-    let numberOfMillisecondsPassed = now - dateCreated;
-    let seconds = 0;
-    let minutes = 0;
-    let hours = 0;
-    let days = 0;
-
-    seconds = Math.floor(numberOfMillisecondsPassed / 1000);
-
-    if (seconds > 60) {
-      minutes = Math.floor(seconds / 60);
-    } else {
-      return `${seconds}S`;
-    }
-
-    if (minutes > 60) {
-      hours = Math.floor(minutes / 60);
-    } else {
-      return `${minutes}M`;
-    }
-
-    if (hours > 24) {
-      days = Math.floor(hours / 24);
-    } else {
-      return `${hours}H`;
-    }
-
-    if (days) return `${days}D`;
   };
 
   useEscape(setShowDeleteConfirmationModal);
