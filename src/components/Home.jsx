@@ -15,6 +15,7 @@ export const Home = () => {
 
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [sortPost, setSortPost] = useState("latest");
+  const [trendingPosts, setTrendingPosts] = useState(false);
 
   let filteredPosts = posts.filter(({ data }) => {
     return (
@@ -24,6 +25,12 @@ export const Home = () => {
 
   if (sortPost === "oldest") {
     filteredPosts = filteredPosts.reverse();
+  }
+
+  if (trendingPosts) {
+    filteredPosts = filteredPosts.sort((a, b) => {
+      return b.data.likes - a.data.likes;
+    });
   }
 
   return (
@@ -67,7 +74,12 @@ export const Home = () => {
             >
               Posts
             </Typography>
-            <SortPosts sortPost={sortPost} setSortPost={setSortPost} />
+            <SortPosts
+              sortPost={sortPost}
+              setSortPost={setSortPost}
+              trendingPosts={trendingPosts}
+              setTrendingPosts={setTrendingPosts}
+            />
           </Stack>
 
           <Box component="section">

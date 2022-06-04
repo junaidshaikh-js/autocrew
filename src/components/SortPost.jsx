@@ -10,7 +10,12 @@ import {
   Typography,
 } from "utils/material-ui";
 
-export const SortPosts = ({ sortPost, setSortPost }) => {
+export const SortPosts = ({
+  sortPost,
+  setSortPost,
+  trendingPosts,
+  setTrendingPosts,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
@@ -42,12 +47,29 @@ export const SortPosts = ({ sortPost, setSortPost }) => {
             fontWeight: "bold",
           }}
         >
+          Filter Posts
+        </Typography>
+        <MenuItem>
+          <Checkbox
+            checked={trendingPosts}
+            onChange={() => setTrendingPosts((t) => !t)}
+          />
+          Trending
+        </MenuItem>
+
+        <Typography
+          textAlign="center"
+          sx={{
+            fontWeight: "bold",
+          }}
+        >
           Sort Posts
         </Typography>
         <MenuItem>
           <Checkbox
             checked={sortPost === "latest"}
             onChange={() => setSortPost("latest")}
+            disabled={trendingPosts}
           />
           Latest
         </MenuItem>
@@ -56,7 +78,7 @@ export const SortPosts = ({ sortPost, setSortPost }) => {
           <Checkbox
             checked={sortPost === "oldest"}
             onChange={() => setSortPost("oldest")}
-            inputProps={{ "aria-label": "controlled" }}
+            disabled={trendingPosts}
           />{" "}
           Oldest
         </MenuItem>
