@@ -24,8 +24,8 @@ export const PostActionBtns = ({
   const { token } = useSelector((store) => store.authDetail);
   const dispatch = useDispatch();
 
-  const isPostLikedByCurrentUser = likedPost.likedPost.includes(postId);
-  const isPostBookmarkedByCurrentUser = bookmarks.bookmarks.includes(postId);
+  const isPostLikedByCurrentUser = likedPost?.likedPost.includes(postId);
+  const isPostBookmarkedByCurrentUser = bookmarks?.bookmarks.includes(postId);
   const { likes, comments } = post?.data || {};
 
   return (
