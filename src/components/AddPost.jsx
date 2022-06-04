@@ -76,7 +76,7 @@ export const AddPost = ({ setLoadingPosts, loadingPosts }) => {
       setPostText("");
       setPostImage(initialPostImageStatus);
       setLoadingPosts(false);
-      showEmojiPicker(false);
+      setShowEmojiPicker(false);
     } catch (error) {
       console.log(error);
       setLoadingPosts(false);
