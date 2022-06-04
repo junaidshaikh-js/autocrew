@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { NotificationPost } from "./NotificationPost";
 import {
   Avatar,
@@ -30,36 +32,46 @@ export const NotificationCard = ({ type, user, post, postByUser }) => {
       </Box>
 
       <Stack flexGrow={1}>
-        <Avatar
+        <Box
+          component={Link}
+          to={`/${user?.id}`}
           sx={{
-            bgcolor: "#1565C0",
-            width: 35,
-            height: 35,
-            fontSize: "3rem",
-            objectFit: "contain",
-            border: 1,
-            mb: 1,
+            textDecoration: "none",
+            color: "currentcolor",
           }}
-          src={profilePicture}
-        />
+        >
+          <Box mb={2}>
+            <Avatar
+              sx={{
+                bgcolor: "#1565C0",
+                width: 35,
+                height: 35,
+                fontSize: "3rem",
+                objectFit: "contain",
+                border: 1,
+              }}
+              src={profilePicture}
+            />
+          </Box>
 
-        <Box>
-          <Typography
-            component="span"
-            sx={{
-              fontWeight: "600",
-            }}
-          >
-            {fullName}
-          </Typography>
-          <Typography component="span">
-            {" "}
-            {type === "like"
-              ? "liked your post"
-              : type === "comment"
-              ? "commented on your post"
-              : "followed you"}
-          </Typography>
+          <Box>
+            <Typography
+              component="span"
+              sx={{
+                fontWeight: "600",
+              }}
+            >
+              {fullName}
+            </Typography>
+            <Typography component="span">
+              {" "}
+              {type === "like"
+                ? "liked your post"
+                : type === "comment"
+                ? "commented on your post"
+                : "followed you"}
+            </Typography>
+          </Box>
         </Box>
 
         {type !== "follow" && (

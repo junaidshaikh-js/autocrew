@@ -324,3 +324,22 @@ export const deleteComment = async (postId, comment) => {
     console.log(error);
   }
 };
+
+export const getOtherUserData = createAsyncThunk(
+  "thirdPersonDetail/getOtherUserData",
+  async (userId) => {
+    try {
+      const userData = {};
+
+      const querySnapshot = await getDocs(collection(db, userId));
+
+      querySnapshot.forEach((doc) => {
+        userData[doc.id] = doc.data();
+      });
+
+      return userData;
+    } catch (error) {
+      console.log(console.log(error));
+    }
+  }
+);
