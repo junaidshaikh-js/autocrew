@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { NotificationPost } from "./NotificationPost";
@@ -12,6 +13,7 @@ import {
 } from "utils/material-ui";
 
 export const NotificationCard = ({ type, user, post, postByUser }) => {
+  const { token } = useSelector((store) => store.authDetail);
   const { profilePicture, fullName } = user?.data || {};
 
   return (
@@ -34,7 +36,7 @@ export const NotificationCard = ({ type, user, post, postByUser }) => {
       <Stack flexGrow={1}>
         <Box
           component={Link}
-          to={`/${user?.id}`}
+          to={token === user?.id ? "/profile" : `/${user?.id}`}
           sx={{
             textDecoration: "none",
             color: "currentcolor",
