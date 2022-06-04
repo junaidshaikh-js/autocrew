@@ -1,8 +1,19 @@
-import { CommentSection } from "features/posts/components/CommentSection";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
-import { handlePostLike, handleBookmark } from "features/posts/utils";
+import {
+  handlePostLike,
+  handleBookmark,
+  handlePostDelete,
+} from "features/posts/utils";
+import {
+  CommentSection,
+  PostMenu,
+  DeleteConfirmationModal,
+  EditPostModal,
+} from "features";
+import { ReactPortal } from "./ReactPortal";
 import {
   Box,
   KeyboardBackspaceIcon,
@@ -29,15 +40,21 @@ export const SinglePost = () => {
   const { token } = useSelector((store) => store.authDetail);
   const dispatch = useDispatch();
 
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
+  const [showEditPostModal, setShowEditPostModal] = useState(false);
+
   const post = posts.find((_post) => _post.id === postId);
   const { postText, postImageUrl, postImageName, dateCreated, likes } =
     post?.data || {};
   const postBy = users.find((user) => user.id === post?.data.postBy);
   const { data: { profilePicture, fullName, userName } = {} } = postBy || {};
-  const isPostPostedByCurrentUser = userPosts?.userPosts?.includes(post.id);
+  const isPostPostedByCurrentUser = userPosts?.posts?.includes(postId);
   const isPostLikedByCurrentUser = likedPost?.likedPost.includes(postId);
   const isPostBookmarkedByCurrentUser = bookmarks?.bookmarks.includes(postId);
   const navigate = useNavigate();
+
+  console.log({ userPosts, postId, isPostPostedByCurrentUser });
 
   const getPostDate = (dateCreated) => {
     const postDate = new Date(dateCreated);
@@ -77,7 +94,7 @@ export const SinglePost = () => {
           <CircularProgress size="4rem" />
         </Box>
       ) : (
-        <Box component="main" sx={{ border: 1, p: 1 }}>
+        <Box component="main" sx={{ border: 1, p: 1, position: "relative" }}>
           <Stack direction="row" alignItems="center">
             <IconButton
               onClick={() => navigate(-1)}
@@ -225,6 +242,28 @@ export const SinglePost = () => {
           <Box my={2}>
             <CommentSection post={post} />
           </Box>
+
+          {isPostPostedByCurrentUser && (
+            <PostMenu
+              setShowEditPostModal={setShowEditPostModal}
+              setShowDeleteConfirmationModal={setShowDeleteConfirmationModal}
+            />
+          )}
+
+          {showDeleteConfirmationModal && (
+            <ReactPortal>
+              <DeleteConfirmationModal
+                showModal={setShowDeleteConfirmationModal}
+                handleDelete={() => handlePostDelete(post.id, token, dispatch)}
+              />
+            </ReactPortal>
+          )}
+
+          {showEditPostModal && (
+            <ReactPortal>
+              <EditPostModal showModal={setShowEditPostModal} post={post} />
+            </ReactPortal>
+          )}
         </Box>
       )}
     </>
