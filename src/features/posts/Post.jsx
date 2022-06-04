@@ -1,28 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 
-import { deletePost } from "../../firebase/firebase-calls";
-import { updatePostsForDelete } from "features/posts/postSlice";
-import { deleteUserPost } from "features/user-data/userSlice";
 import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
 import { EditPostModal } from "./components/EditPostModal";
 import { CommentSection } from "./components/CommentSection";
 import { PostActionBtns } from "./components/PostActionBtns";
+import { PostMenu } from "./components/PostMenu";
 import { ReactPortal } from "components";
 import { useEscape } from "hooks";
-import { getPostTime } from "./utils";
+import { getPostTime, handlePostDelete } from "./utils";
 import {
   Box,
   Stack,
   Avatar,
   Typography,
   GrayTextP,
-  IconButton,
-  MoreVertIcon,
-  Menu,
-  MenuItem,
   Collapse,
 } from "utils/material-ui";
 
@@ -34,12 +27,10 @@ export const Post = ({ post }) => {
   } = useSelector((store) => store.userDetail);
   const dispatch = useDispatch();
 
-  const [anchorEl, setAnchorEl] = useState(null);
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
     useState(false);
   const [showEditPostModal, setShowEditPostModal] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false);
-  const open = Boolean(anchorEl);
 
   const { postText, postImageUrl, postImageName, dateCreated } =
     post?.data || {};
@@ -50,22 +41,8 @@ export const Post = ({ post }) => {
 
   const isPostPostedByCurrentUser = posts.posts.includes(post.id);
 
-  const handlePostDelete = async () => {
-    try {
-      await deletePost(post.id, token);
-      dispatch(deleteUserPost(post.id));
-      dispatch(updatePostsForDelete(post.id));
-      toast.success("Post deleted");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleMenuClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
   useEscape(setShowDeleteConfirmationModal);
+  useEscape(setShowEditPostModal);
 
   return (
     <Box
@@ -170,50 +147,10 @@ export const Post = ({ post }) => {
         </Box>
 
         {isPostPostedByCurrentUser && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: "4%",
-              right: 0,
-            }}
-          >
-            <IconButton
-              id="menu-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={(e) => handleMenuClick(e)}
-            >
-              <MoreVertIcon />
-            </IconButton>
-
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={() => setAnchorEl(null)}
-              MenuListProps={{
-                "aria-labelledby": "menu-button",
-              }}
-            >
-              <MenuItem
-                onClick={() => {
-                  setShowEditPostModal(true);
-                  setAnchorEl(false);
-                }}
-              >
-                Edit
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setShowDeleteConfirmationModal(true);
-                  setAnchorEl(false);
-                }}
-              >
-                Delete
-              </MenuItem>
-            </Menu>
-          </Box>
+          <PostMenu
+            setShowEditPostModal={setShowEditPostModal}
+            setShowDeleteConfirmationModal={setShowDeleteConfirmationModal}
+          />
         )}
       </Stack>
 
@@ -221,7 +158,7 @@ export const Post = ({ post }) => {
         <ReactPortal>
           <DeleteConfirmationModal
             showModal={setShowDeleteConfirmationModal}
-            handleDelete={handlePostDelete}
+            handleDelete={() => handlePostDelete(post.id, token, dispatch)}
           />
         </ReactPortal>
       )}

@@ -5,6 +5,7 @@ import {
   dislikePost,
   likePost,
   removePostFromBookmark,
+  deletePost,
 } from "../../firebase/firebase-calls";
 
 import {
@@ -12,9 +13,10 @@ import {
   updateLikedPostsForDislike,
   addToBookmark,
   removeFromBookmark,
+  deleteUserPost,
 } from "features/user-data/userSlice";
 
-import { updatePostLike } from "features/posts/postSlice";
+import { updatePostLike, updatePostsForDelete } from "features/posts/postSlice";
 
 export const getPostTime = (dateCreated) => {
   let now = Date.now();
@@ -80,6 +82,17 @@ export const handleBookmark = async (postAction, postId, token, dispatch) => {
       dispatch(addToBookmark(postId, token));
       toast.success("Post bookmarked");
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const handlePostDelete = async (postId, token, dispatch) => {
+  try {
+    await deletePost(postId, token);
+    dispatch(deleteUserPost(postId));
+    dispatch(updatePostsForDelete(postId));
+    toast.success("Post deleted");
   } catch (error) {
     console.log(error);
   }
