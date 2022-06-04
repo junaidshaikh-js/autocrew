@@ -23,6 +23,8 @@ import {
   Explore,
   Bookmark,
   Notification,
+  SinglePost,
+  ScrollToTop,
 } from "components";
 import "./App.css";
 
@@ -53,6 +55,9 @@ function App() {
           },
         }}
       />
+
+      <ScrollToTop />
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -62,6 +67,7 @@ function App() {
           <Route path="/bookmarks" element={<Bookmark />} />
           <Route path="/notifications" element={<Notification />} />
           <Route path="/:userId" element={<ThirdPersonPage />} />
+          <Route path="/post/:postId" element={<SinglePost />} />
           <Route path="/profile" element={<Profile />}>
             <Route path="/profile" element={<Posts />} />
             <Route path="/profile/followers" element={<Followers />} />

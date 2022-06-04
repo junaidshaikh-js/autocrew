@@ -8,6 +8,8 @@ import { Bookmark } from "./Bookmark";
 import { Notification } from "./Notification";
 import { ProfileModal } from "./ProfileModal";
 import { UserCard } from "./UserCard";
+import { SinglePost } from "./SinglePost";
+import { ScrollToTop } from "./ScrollToTop";
 
 export {
   PrivateRoute,
@@ -20,4 +22,6 @@ export {
   ReactPortal,
   ProfileModal,
   UserCard,
+  SinglePost,
+  ScrollToTop,
 };
