@@ -39,7 +39,7 @@ export const Post = ({ post }) => {
 
   const { data: { profilePicture, fullName, userName } = {} } = postBy || {};
 
-  const isPostPostedByCurrentUser = posts.posts.includes(post.id);
+  const isPostPostedByCurrentUser = posts?.posts.includes(post.id);
 
   useEscape(setShowDeleteConfirmationModal);
   useEscape(setShowEditPostModal);
