@@ -24,9 +24,15 @@ export const signup = createAsyncThunk(
       await createUserDb(firstName, lastName, userName, email, user.uid);
 
       toast.success("Sign up successful");
+
       return user.uid;
     } catch (error) {
-      console.log(error);
+      if (error.code === "auth/email-already-in-use") {
+        toast.error("Email is already registered");
+      } else {
+        console.log(error.code);
+        toast.error("Please try again later.");
+      }
     }
   }
 );
@@ -40,9 +46,18 @@ export const login = createAsyncThunk(
       const { user } = await signInWithEmailAndPassword(auth, email, password);
 
       toast.success("Log in successful");
+
       return user.uid;
     } catch (error) {
-      console.log(error);
+      if (error.code === "auth/user-not-found") {
+        toast.error("You are not registerd with us. Please sign up.");
+      }
+
+      if (error.code === "auth/wrong-password") {
+        toast.error("Wrong password");
+      }
+
+      toast.error("Error occured. Please try again later.");
     }
   }
 );
@@ -61,6 +76,7 @@ export const loginAsGuest = createAsyncThunk(
       return user.uid;
     } catch (error) {
       console.log(error);
+      toast.error("Error occured. Please try again later.");
     }
   }
 );
