@@ -15,6 +15,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import InfoIcon from "@mui/icons-material/Info";
 
 export {
   HomeOutlinedIcon,
@@ -34,4 +35,5 @@ export {
   FilterListIcon,
   PermIdentityIcon,
   KeyboardBackspaceIcon,
+  InfoIcon,
 };

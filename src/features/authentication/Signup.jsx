@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { TextFormField } from "./components/TextFormField";
 import { CustomButton } from "./components/CustomButton";
 import { RouterLink } from "./components/RouterLink";
-import { handleFormChange } from "./utils";
+import { handleFormChange, validateForm } from "./utils";
 import { signup } from "../../firebase/firebase-auth";
 import {
   Container,
@@ -14,6 +14,7 @@ import {
   createTheme,
   GrayTextP,
   LoadingButton,
+  InfoIcon,
 } from "utils/material-ui";
 
 const theme = createTheme();
@@ -36,26 +37,37 @@ export const Signup = () => {
   };
 
   const [formValues, setFormValues] = useState(initalFormValues);
+  const [formErrors, setFormErrors] = useState({
+    password: "",
+    confirmPassword: "",
+  });
   const isSigningUp = useSelector((store) => store.authDetail.isSigningUp);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { firstName, lastName, userName, email, password, confirmPassword } =
     formValues;
+  const { password: passwordError, confirmPassword: confirmPasswordError } =
+    formErrors;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await dispatch(signup(formValues));
+    const errors = validateForm(password, confirmPassword);
 
-    navigate("/");
+    if (!Object.keys(errors).length) {
+      await dispatch(signup(formValues));
+      navigate("/");
+    }
+
+    setFormErrors(errors);
   };
 
   return (
     <Container
       maxWidth="sm"
       sx={{
-        height: "90vh",
+        minHeight: "90vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -112,21 +124,54 @@ export const Signup = () => {
             onChange={(e) => handleFormChange(e, setFormValues)}
           />
 
-          <TextFormField
-            type="password"
-            label="Password"
-            value={password}
-            name="password"
-            onChange={(e) => handleFormChange(e, setFormValues)}
-          />
+          <Box>
+            <TextFormField
+              type="password"
+              label="Password"
+              value={password}
+              name="password"
+              onChange={(e) => handleFormChange(e, setFormValues)}
+            />
 
-          <TextFormField
-            type="password"
-            label="Confirm password"
-            value={confirmPassword}
-            name="confirmPassword"
-            onChange={(e) => handleFormChange(e, setFormValues)}
-          />
+            {passwordError && (
+              <Typography
+                component="span"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "red",
+                  my: "0.5rem",
+                }}
+              >
+                <InfoIcon />
+                Password should be atleast 6 character long.
+              </Typography>
+            )}
+          </Box>
+
+          <Box>
+            <TextFormField
+              type="password"
+              label="Confirm password"
+              value={confirmPassword}
+              name="confirmPassword"
+              onChange={(e) => handleFormChange(e, setFormValues)}
+            />
+
+            {confirmPasswordError && (
+              <Typography
+                component="span"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "red",
+                  my: "0.5rem",
+                }}
+              >
+                <InfoIcon /> Password doesn't match.
+              </Typography>
+            )}
+          </Box>
 
           {isSigningUp === "loading" ? (
             <LoadingButton
