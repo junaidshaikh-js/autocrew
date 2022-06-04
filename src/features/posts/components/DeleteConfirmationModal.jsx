@@ -1,6 +1,12 @@
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { Box, Typography, Button } from "utils/material-ui";
 
 export const DeleteConfirmationModal = ({ showModal, handleDelete }) => {
+  const location = useLocation();
+  console.log(location.pathname);
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -51,7 +57,13 @@ export const DeleteConfirmationModal = ({ showModal, handleDelete }) => {
             mb: 2,
             textTransform: "none",
           }}
-          onClick={() => handleDelete()}
+          onClick={() => {
+            const re = /\/post\/[a-zA-Z1-9]+/;
+            handleDelete();
+            if (location.pathname.match(re)) {
+              navigate(-1);
+            }
+          }}
         >
           Delete
         </Button>
