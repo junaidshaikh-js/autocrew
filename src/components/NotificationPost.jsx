@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { getPostTime } from "features/posts/utils";
 import { Avatar, Box, Stack, Typography, GrayTextP } from "utils/material-ui";
 
@@ -6,9 +8,13 @@ export const NotificationPost = ({ postByUser, post }) => {
 
   return (
     <Box
+      component={Link}
+      to={`/post/${post?.id}`}
       sx={{
         border: 1,
         mt: 1,
+        textDecoration: "none",
+        color: "currentcolor",
       }}
     >
       <Stack
