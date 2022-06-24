@@ -8,6 +8,7 @@ import {
   Menu,
   MenuItem,
   Typography,
+  FormControlLabel,
 } from "utils/material-ui";
 
 export const SortPosts = ({
@@ -50,11 +51,15 @@ export const SortPosts = ({
           Filter Posts
         </Typography>
         <MenuItem>
-          <Checkbox
-            checked={trendingPosts}
-            onChange={() => setTrendingPosts((t) => !t)}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={trendingPosts}
+                onChange={() => setTrendingPosts((t) => !t)}
+              />
+            }
+            label="Trending"
           />
-          Trending
         </MenuItem>
 
         <Typography
@@ -66,21 +71,29 @@ export const SortPosts = ({
           Sort Posts
         </Typography>
         <MenuItem>
-          <Checkbox
-            checked={sortPost === "latest"}
-            onChange={() => setSortPost("latest")}
-            disabled={trendingPosts}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={sortPost === "latest"}
+                onChange={() => setSortPost("latest")}
+                disabled={trendingPosts}
+              />
+            }
+            label="Latest"
           />
-          Latest
         </MenuItem>
 
-        <MenuItem onClick={() => {}}>
-          <Checkbox
-            checked={sortPost === "oldest"}
-            onChange={() => setSortPost("oldest")}
-            disabled={trendingPosts}
-          />{" "}
-          Oldest
+        <MenuItem>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={sortPost === "oldest"}
+                onChange={() => setSortPost("oldest")}
+                disabled={trendingPosts}
+              />
+            }
+            label="Oldest"
+          />
         </MenuItem>
       </Menu>
     </Box>
