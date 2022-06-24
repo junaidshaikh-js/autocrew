@@ -203,13 +203,15 @@ export const likePost = async (postId, userId, postBy) => {
     const postDocRef = doc(db, "posts", postId);
     const postByUserNotificationRef = doc(db, postBy, "notifications");
 
-    await updateDoc(postByUserNotificationRef, {
-      notifications: arrayUnion({
-        notificationType: "like",
-        postId,
-        notificationDetails: userId,
-      }),
-    });
+    if (userId !== postBy) {
+      await updateDoc(postByUserNotificationRef, {
+        notifications: arrayUnion({
+          notificationType: "like",
+          postId,
+          notificationDetails: userId,
+        }),
+      });
+    }
 
     await updateDoc(userLikedPostRef, {
       likedPost: arrayUnion(postId),
@@ -292,18 +294,20 @@ export const updatePost = async (postId, postText, postImage) => {
   }
 };
 
-export const addComment = async (postId, comment, postBy) => {
+export const addComment = async (postId, userId, comment, postBy) => {
   try {
     const postRef = doc(db, "posts", postId);
     const postByUserNotificationRef = doc(db, postBy, "notifications");
 
-    await updateDoc(postByUserNotificationRef, {
-      notifications: arrayUnion({
-        notificationType: "comment",
-        postId,
-        notificationDetails: comment.commentBy,
-      }),
-    });
+    if (userId !== postBy) {
+      await updateDoc(postByUserNotificationRef, {
+        notifications: arrayUnion({
+          notificationType: "comment",
+          postId,
+          notificationDetails: comment.commentBy,
+        }),
+      });
+    }
 
     await updateDoc(postRef, {
       comments: arrayUnion(comment),
@@ -339,7 +343,7 @@ export const getOtherUserData = createAsyncThunk(
 
       return userData;
     } catch (error) {
-      console.log(console.log(error));
+      console.log(error);
     }
   }
 );
