@@ -116,6 +116,7 @@ export const Post = ({ post }) => {
             <Box
               sx={{
                 wordBreak: "break-all",
+                mr: 1,
               }}
             >
               <Typography>{postText}</Typography>
