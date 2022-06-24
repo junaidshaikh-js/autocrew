@@ -150,7 +150,15 @@ export const SinglePost = () => {
             </Stack>
           </Stack>
 
-          <Box mx={2} mt={4} mb={2} pb={2}>
+          <Box
+            mx={2}
+            mt={4}
+            mb={2}
+            pb={2}
+            sx={{
+              wordBreak: "break-all",
+            }}
+          >
             <Typography>{postText}</Typography>
 
             {postImageUrl && (
