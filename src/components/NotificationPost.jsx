@@ -71,7 +71,11 @@ export const NotificationPost = ({ postByUser, post }) => {
                 </GrayTextP>
               </Stack>
 
-              <Box>
+              <Box
+                sx={{
+                  wordBreak: "break-all",
+                }}
+              >
                 <Typography>{postText}</Typography>
 
                 {postImageUrl && (
