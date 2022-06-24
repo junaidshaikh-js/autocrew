@@ -54,8 +54,6 @@ export const SinglePost = () => {
   const isPostBookmarkedByCurrentUser = bookmarks?.bookmarks.includes(postId);
   const navigate = useNavigate();
 
-  console.log({ userPosts, postId, isPostPostedByCurrentUser });
-
   const getPostDate = (dateCreated) => {
     const postDate = new Date(dateCreated);
     const months = [

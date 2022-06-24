@@ -41,8 +41,6 @@ export const ThirdPersonPage = () => {
   const isUserFollowing = following?.following.includes(userId);
   const postByUser = posts.filter((post) => post.data.postBy === userId);
 
-  console.log(thirdPersonDetails);
-
   return (
     <Box component="main" sx={{ border: 1 }}>
       {thirdPersonDetailLoading === "loading" ? (

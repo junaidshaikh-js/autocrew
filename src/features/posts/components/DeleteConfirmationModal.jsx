@@ -4,7 +4,6 @@ import { Box, Typography, Button } from "utils/material-ui";
 
 export const DeleteConfirmationModal = ({ showModal, handleDelete }) => {
   const location = useLocation();
-  console.log(location.pathname);
   const navigate = useNavigate();
 
   return (
