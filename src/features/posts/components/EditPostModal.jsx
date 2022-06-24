@@ -227,11 +227,11 @@ export const EditPostModal = ({ showModal, post: { id, data } }) => {
           <Box
             style={{
               position: "absolute",
-              bottom: "15%",
+              bottom: "40%",
             }}
           >
             <Picker
-              pickerStyle={{ width: "90%", zIndex: 1 }}
+              pickerStyle={{ width: "70%", zIndex: 1 }}
               onEmojiClick={onEmojiClick}
             />
           </Box>
