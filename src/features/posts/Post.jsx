@@ -22,6 +22,8 @@ import {
 export const Post = ({ post }) => {
   const { users } = useSelector((store) => store.users);
   const { token } = useSelector((store) => store.authDetail);
+
+  console.log(users);
   const {
     userDetails: { posts },
   } = useSelector((store) => store.userDetail);

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { updateUserDetail } from "../firebase/firebase-calls";
+import { updateUserDetailState } from "features/users/usersSlice";
 import {
   Box,
   Typography,
@@ -74,6 +75,7 @@ export const ProfileModal = ({ setShowModal }) => {
 
   const handleUserDetailSubmit = async () => {
     setUpdatingUserDetail(true);
+    dispatch(updateUserDetailState({ token, userDetails }));
     await updateUserDetail(token, userDetails, dispatch);
     setUpdatingUserDetail(false);
     setShowModal(false);
