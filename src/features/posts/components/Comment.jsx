@@ -50,7 +50,9 @@ export const Comment = ({ postId, comment }) => {
       my={1}
       sx={{
         borderBottom: 1,
+        borderColor: "#d7c8c8",
         pb: 2,
+        wordBreak: "break-all",
       }}
     >
       <Box>

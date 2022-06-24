@@ -62,6 +62,7 @@ export const Post = ({ post }) => {
           px: 1,
           py: 2,
           borderTop: 1,
+          borderColor: "#d7c8c8",
         }}
       >
         <Box
@@ -112,7 +113,11 @@ export const Post = ({ post }) => {
               </GrayTextP>
             </Stack>
 
-            <Box>
+            <Box
+              sx={{
+                wordBreak: "break-all",
+              }}
+            >
               <Typography>{postText}</Typography>
 
               {postImageUrl && (

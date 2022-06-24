@@ -51,6 +51,7 @@ export const CommentSection = ({ post: { id, data } }) => {
       sx={{
         backgroundColor: "white",
         borderTop: 1,
+        borderColor: "#d7c8c8",
         py: 1,
       }}
     >
