@@ -34,6 +34,7 @@ export const UserCard = ({ user }) => {
           ml: 1,
           flexGrow: 1,
         }}
+        aria-label="Go to user profile"
       >
         <Box>
           <Avatar
@@ -46,6 +47,7 @@ export const UserCard = ({ user }) => {
               border: 1,
             }}
             src={profilePicture}
+            alt="Profile Picture"
           />
         </Box>
 
@@ -61,7 +63,7 @@ export const UserCard = ({ user }) => {
           <Typography
             ml={0}
             sx={{
-              color: "#9e9e9e",
+              color: "#726969",
             }}
             fontSize="0.75rem"
           >

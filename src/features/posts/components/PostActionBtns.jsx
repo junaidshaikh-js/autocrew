@@ -61,6 +61,7 @@ export const PostActionBtns = ({
             sx={{
               ml: 1,
               fontSize: "0.875rem",
+              color: "#5e5757",
             }}
           >
             {likes}
@@ -79,6 +80,7 @@ export const PostActionBtns = ({
             sx={{
               ml: 1,
               fontSize: "0.875rem",
+              color: "#5e5757",
             }}
           >
             {comments.length}

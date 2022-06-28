@@ -163,6 +163,7 @@ export const ProfileModal = ({ setShowModal }) => {
                     border: 1,
                   }}
                   src={userDetails.profilePicture}
+                  alt="Profile Picture"
                 />
               ) : (
                 <Avatar
@@ -174,6 +175,7 @@ export const ProfileModal = ({ setShowModal }) => {
                     mx: "auto",
                     filter: "grascale(20%)",
                   }}
+                  alt="Profile Picture"
                 >
                   {fullName?.slice(0, 1)}
                 </Avatar>

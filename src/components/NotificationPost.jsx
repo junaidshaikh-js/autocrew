@@ -28,6 +28,7 @@ export const NotificationPost = ({ postByUser, post }) => {
             textDecoration: "none",
             color: "currentcolor",
           }}
+          aria-label="Go to user profile"
         >
           <Stack
             component="section"
@@ -48,6 +49,7 @@ export const NotificationPost = ({ postByUser, post }) => {
                   border: 1,
                 }}
                 src={postByUser?.data.profilePicture}
+                alt="Profile Picture"
               />
             </Box>
 

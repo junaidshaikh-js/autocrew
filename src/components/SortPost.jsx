@@ -28,6 +28,7 @@ export const SortPosts = ({
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
+        title="Filter Posts"
         onClick={(e) => setAnchorEl(e.currentTarget)}
       >
         <FilterListIcon />

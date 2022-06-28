@@ -62,6 +62,7 @@ export const Comment = ({ postId, comment }) => {
           sx={{
             borderRadius: "999px",
           }}
+          aria-label="Go to user profile"
         >
           <Avatar
             sx={{
@@ -74,6 +75,7 @@ export const Comment = ({ postId, comment }) => {
               border: 1,
             }}
             src={profilePicture}
+            alt="Profile Picture"
           />
         </Button>
       </Box>
@@ -104,7 +106,6 @@ export const Comment = ({ postId, comment }) => {
           }}
         >
           <IconButton
-            id="comment-menu-button"
             aria-controls={open ? "basic-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
@@ -114,7 +115,6 @@ export const Comment = ({ postId, comment }) => {
           </IconButton>
 
           <Menu
-            id="basic-menu"
             anchorEl={anchorEl}
             open={open}
             onClose={() => setAnchorEl(null)}

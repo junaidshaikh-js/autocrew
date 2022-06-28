@@ -70,6 +70,7 @@ export const CommentSection = ({ post: { id, data } }) => {
             sx={{
               borderRadius: "999px",
             }}
+            aria-label="Go to user profile"
           >
             <Avatar
               sx={{
@@ -82,6 +83,7 @@ export const CommentSection = ({ post: { id, data } }) => {
                 border: 1,
               }}
               src={profilePicture}
+              alt="Profile Picture"
             />
           </Button>
 

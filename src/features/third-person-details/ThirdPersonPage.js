@@ -78,6 +78,7 @@ export const ThirdPersonPage = () => {
                   border: 1,
                 }}
                 src={profilePicture}
+                alt="Profile Picture"
               />
             ) : (
               <Avatar
@@ -87,6 +88,7 @@ export const ThirdPersonPage = () => {
                   height: 100,
                   fontSize: "5rem",
                 }}
+                alt="Profile Picture"
               >
                 {fullName?.slice(0, 1)}
               </Avatar>

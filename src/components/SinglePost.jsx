@@ -119,6 +119,7 @@ export const SinglePost = () => {
               sx={{
                 borderRadius: "999px",
               }}
+              aria-label="Go to user profile"
             >
               <Avatar
                 sx={{
@@ -131,6 +132,7 @@ export const SinglePost = () => {
                   border: 1,
                 }}
                 src={profilePicture}
+                alt="Profile Picture"
               />
             </Box>
 

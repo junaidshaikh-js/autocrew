@@ -41,6 +41,7 @@ export const NotificationCard = ({ type, user, post, postByUser }) => {
             textDecoration: "none",
             color: "currentcolor",
           }}
+          aria-label="Go to user profile"
         >
           <Box mb={2}>
             <Avatar
@@ -53,6 +54,7 @@ export const NotificationCard = ({ type, user, post, postByUser }) => {
                 border: 1,
               }}
               src={profilePicture}
+              alt="Profile Picture"
             />
           </Box>
 

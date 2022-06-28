@@ -22,22 +22,21 @@ export const PostMenu = ({
     <Box
       sx={{
         position: "absolute",
-        top: "4%",
+        top: "10px",
         right: 0,
       }}
     >
       <IconButton
-        id="menu-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
+        title="Post Menu"
         onClick={(e) => handleMenuClick(e)}
       >
         <MoreVertIcon />
       </IconButton>
 
       <Menu
-        id="basic-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}

@@ -39,7 +39,7 @@ export {
 };
 
 export const GrayTextP = styled("p")({
-  color: "#9e9e9e",
+  color: "#726969",
   margin: "0 !important",
   fontFamily: `"Roboto","Helvetica","Arial","sans-serif"`,
   fontWeight: 400,

@@ -101,6 +101,7 @@ export const AddPost = ({ setLoadingPosts, loadingPosts }) => {
           sx={{
             borderRadius: "999px",
           }}
+          aria-label="Go to user profile"
         >
           <Avatar
             sx={{
@@ -113,6 +114,7 @@ export const AddPost = ({ setLoadingPosts, loadingPosts }) => {
               border: 1,
             }}
             src={profilePicture}
+            alt="Profile Picture"
           />
         </Button>
       </Box>
